@@ -1,0 +1,9 @@
+PHP GeoIP Extension Changelog
+
+* 1.0.0
+Sun Jun 19 2006
+--------------------------------------------------------------------------------
+by JoungKyun Kim <http://www.oops.org>
+	- first build
+	- config.m4 used maxmind's
+
