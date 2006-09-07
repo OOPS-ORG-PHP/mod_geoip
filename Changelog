@@ -5,6 +5,9 @@ Thu Sep  7 2006
 --------------------------------------------------------------------------------
 by JoungKyun Kim <http://www.oops.org>
 	- fixed memory leak
+	- support GeoIPISP
+	- support GeoIPCITY
+	- support GeoIPORG
 
 * 1.0.0
 Sun Jun 19 2006
