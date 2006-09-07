@@ -15,7 +15,7 @@
   | Author: JoungKYun.Kim <http://www.oops.org>                          |
   +----------------------------------------------------------------------+
 
-  $Id: php_geoip.c,v 1.1.1.1 2006-06-20 07:48:32 oops Exp $
+  $Id: php_geoip.c,v 1.2 2006-09-07 10:56:13 oops Exp $
 */
 
 /*
@@ -282,7 +282,7 @@ PHP_FUNCTION(geoip_database_info)
 
 	db_info = GeoIP_database_info (ge->gi);
 
-	RETURN_STRING (db_info, 1);
+	RETVAL_STRING (db_info, 1);
 	efree (db_info);
 }
 
