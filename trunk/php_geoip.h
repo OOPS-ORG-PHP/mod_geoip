@@ -15,7 +15,7 @@
   | Author: JoungKyun.Kim <http://www.oops.org>                          |
   +----------------------------------------------------------------------+
 
-  $Id: php_geoip.h,v 1.1.1.1 2006-06-20 07:48:32 oops Exp $
+  $Id: php_geoip.h,v 1.2 2006-09-07 13:36:03 oops Exp $
 */
 
 #ifndef PHP_GEOIP_H
@@ -47,9 +47,12 @@ PHP_MINFO_FUNCTION(geoip);
 PHP_FUNCTION(geoip_open);
 PHP_FUNCTION(geoip_close);
 PHP_FUNCTION(geoip_database_info);
+PHP_FUNCTION(geoip_db_avail);
 PHP_FUNCTION(geoip_country_code_by_name);
 PHP_FUNCTION(geoip_country_name_by_name);
 PHP_FUNCTION(geoip_id_by_name);
+PHP_FUNCTION(geoip_record_by_name);
+PHP_FUNCTION(geoip_org_by_name);
 
 
 ZEND_BEGIN_MODULE_GLOBALS(geoip)
@@ -64,6 +67,7 @@ ZEND_END_MODULE_GLOBALS(geoip)
 
 typedef struct geo_resource {
 	GeoIP *gi;
+	int type;
 } GeoIP_API;
 
 #endif /* PHP_GEOIP_H */

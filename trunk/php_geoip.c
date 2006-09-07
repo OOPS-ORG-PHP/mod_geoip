@@ -15,14 +15,14 @@
   | Author: JoungKYun.Kim <http://www.oops.org>                          |
   +----------------------------------------------------------------------+
 
-  $Id: php_geoip.c,v 1.2 2006-09-07 10:56:13 oops Exp $
+  $Id: php_geoip.c,v 1.3 2006-09-07 13:36:03 oops Exp $
 */
 
 /*
  * PHP5 GeoIP module "geoip"
  */
 
-#define EXTENSION_VERSION "1.0.0"
+#define EXTENSION_VERSION "1.1.0"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,12 +48,15 @@ static int le_geoip;
 
 
 function_entry geoip_functions[] = {
-   PHP_FE(geoip_open,   NULL)   
-   PHP_FE(geoip_close,   NULL)   
-   PHP_FE(geoip_database_info,   NULL)   
-   PHP_FE(geoip_country_code_by_name,   NULL)
-   PHP_FE(geoip_country_name_by_name,   NULL)
-   PHP_FE(geoip_id_by_name,   NULL)
+   PHP_FE(geoip_open,                 NULL)   
+   PHP_FE(geoip_close,                NULL)   
+   PHP_FE(geoip_database_info,        NULL)   
+   PHP_FE(geoip_db_avail,             NULL)   
+   PHP_FE(geoip_country_code_by_name, NULL)
+   PHP_FE(geoip_country_name_by_name, NULL)
+   PHP_FE(geoip_id_by_name,           NULL)
+   PHP_FE(geoip_record_by_name,       NULL)
+   PHP_FE(geoip_org_by_name,          NULL)
    {NULL, NULL, NULL}   
 };
 /* }}} */
@@ -113,6 +116,7 @@ static void _close_geoip_link (zend_rsrc_list_entry *rsrc TSRMLS_DC)
 	GeoIP_API *ge = (GeoIP_API *) rsrc->ptr;
 	GeoIP_delete (ge->gi);
 	efree (ge);
+	ge = NULL;
 }
 /* }}} */
 
@@ -125,10 +129,24 @@ PHP_MINIT_FUNCTION(geoip)
 
    le_geoip = zend_register_list_destructors_ex (_close_geoip_link, NULL, "GeoIP link", module_number);
 
+   /* define geoip open method */
    REGISTER_LONG_CONSTANT ("GEOIP_STANDARD", GEOIP_STANDARD, CONST_PERSISTENT | CONST_CS);
    REGISTER_LONG_CONSTANT ("GEOIP_MEMORY_CACHE", GEOIP_MEMORY_CACHE, CONST_PERSISTENT | CONST_CS);
    REGISTER_LONG_CONSTANT ("GEOIP_CHECK_CACHE", GEOIP_CHECK_CACHE, CONST_PERSISTENT | CONST_CS);
    REGISTER_LONG_CONSTANT ("GEOIP_INDEX_CACHE", GEOIP_INDEX_CACHE, CONST_PERSISTENT | CONST_CS);
+
+   /* define geoip database type */
+   REGISTER_LONG_CONSTANT ("GEOIP_COUNTRY_EDITION", GEOIP_COUNTRY_EDITION, CONST_PERSISTENT | CONST_CS);
+   REGISTER_LONG_CONSTANT ("GEOIP_REGION_EDITION_REV0", GEOIP_REGION_EDITION_REV0, CONST_PERSISTENT | CONST_CS);
+   REGISTER_LONG_CONSTANT ("GEOIP_CITY_EDITION_REV0", GEOIP_CITY_EDITION_REV0, CONST_PERSISTENT | CONST_CS);
+   REGISTER_LONG_CONSTANT ("GEOIP_ORG_EDITION", GEOIP_ORG_EDITION, CONST_PERSISTENT | CONST_CS);
+   REGISTER_LONG_CONSTANT ("GEOIP_ISP_EDITION", GEOIP_ISP_EDITION, CONST_PERSISTENT | CONST_CS);
+   REGISTER_LONG_CONSTANT ("GEOIP_CITY_EDITION_REV1", GEOIP_CITY_EDITION_REV1, CONST_PERSISTENT | CONST_CS);
+   REGISTER_LONG_CONSTANT ("GEOIP_REGION_EDITION_REV1", GEOIP_REGION_EDITION_REV1, CONST_PERSISTENT | CONST_CS);
+   REGISTER_LONG_CONSTANT ("GEOIP_PROXY_EDITION", GEOIP_PROXY_EDITION, CONST_PERSISTENT | CONST_CS);
+   REGISTER_LONG_CONSTANT ("GEOIP_ASNUM_EDITION", GEOIP_ASNUM_EDITION, CONST_PERSISTENT | CONST_CS);
+   REGISTER_LONG_CONSTANT ("GEOIP_NETSPEED_EDITION", GEOIP_NETSPEED_EDITION, CONST_PERSISTENT | CONST_CS);
+   REGISTER_LONG_CONSTANT ("GEOIP_DOMAIN_EDITION", GEOIP_DOMAIN_EDITION, CONST_PERSISTENT | CONST_CS);
 
    return SUCCESS;
 }
@@ -167,15 +185,19 @@ PHP_MINFO_FUNCTION(geoip)
    php_info_print_table_start();
    php_info_print_table_header(2, "geoip support", "enabled");
    php_info_print_table_row(2, "geoip extension version", EXTENSION_VERSION);
+   php_info_print_table_row(2, "geoip extension support", "COUNTRY,CITY,ISP,ORG");
    php_info_print_table_end();
    DISPLAY_INI_ENTRIES();
 }
 /* }}} */
 
+/* {{{ geoip_open (database|database_type, flag)
+ */
 PHP_FUNCTION(geoip_open)
 {
 	zval ** database, ** _flag;
 	char *dbname;
+	int dbtype = 0;
 	int dbl = 0;
 	struct stat f;
 	int flag;
@@ -187,38 +209,46 @@ PHP_FUNCTION(geoip_open)
 	ge_argc = ZEND_NUM_ARGS ();
 	switch (ge_argc) {
 		case 2:
-			if ( zend_get_parameters_ex (ge_argc, &database, &_flag) == FAILURE )
+			if ( zend_get_parameters_ex (2, &database, &_flag) == FAILURE )
 				WRONG_PARAM_COUNT;
-			break;
 
-			convert_to_string_ex (database);
-			dbname = Z_STRVAL_PP (database);
+			if ( Z_TYPE_PP (database) == IS_STRING ) {
+				convert_to_string_ex (database);
+				dbname = Z_STRVAL_PP (database);
 
-			if ( ! strlen (dbname) ) {
-				php_error (E_WARNING, "length of %s is zero", database);
-				RETURN_FALSE;
+				if ( ! strlen (dbname) ) {
+					php_error (E_WARNING, "length of %s is zero", database);
+					RETURN_FALSE;
+				}
+
+				r = stat (dbname, &f);
+
+				if ( r == -1 || f.st_size < 1 ) {
+					php_error (E_WARNING, "%s not found or size is zoro", database);
+					RETURN_FALSE;
+				}
+
+				dbl = f.st_size;
+			} else {
+				convert_to_long_ex (database);
+				dbtype = Z_LVAL_PP (database);
+				dbl = -1;
 			}
 
-			r = stat (dbname, &f);
+			convert_to_long_ex (_flag);
+			flag = Z_LVAL_PP (_flag);
 
-			if ( r == -1 || f.st_size < 1 ) {
-				php_error (E_WARNING, "%s not found or size is zoro", database);
-				RETURN_FALSE;
-			}
-
-			dbl = f.st_size;
 			break;
 		case 1:
-			if ( zend_get_parameters_ex (ge_argc, &_flag) == FAILURE )
+			if ( zend_get_parameters_ex (1, &_flag) == FAILURE )
 				WRONG_PARAM_COUNT;
+
+			convert_to_long_ex (_flag);
+			flag = Z_LVAL_PP (_flag);
+
 			break;
 		default:
-			flag = GEOIP_MEMORY_CACHE;
-	}
-
-	if ( ge_argc ) {
-		convert_to_long_ex (_flag);
-		flag = Z_LVAL_PP (_flag);
+			flag = GEOIP_MEMORY_CACHE | GEOIP_CHECK_CACHE;
 	}
 
 	/*
@@ -230,10 +260,15 @@ PHP_FUNCTION(geoip_open)
 
 	ge = (GeoIP_API *) emalloc (sizeof (GeoIP_API));
 
+	ge->type = dbtype;
+
 	if ( ! dbl ) {
 		ge->gi = GeoIP_new (flag);
 	} else {
-		ge->gi = GeoIP_open (dbname, flag);
+		if ( dbl != -1 )
+			ge->gi = GeoIP_open (dbname, flag);
+		else
+			ge->gi = GeoIP_open_type (dbtype, flag);
 	}
 
 	if ( ge->gi == NULL ) {
@@ -242,7 +277,10 @@ PHP_FUNCTION(geoip_open)
 
 	ZEND_REGISTER_RESOURCE (return_value, ge, le_geoip);
 }
+/* }}} */
 
+/* {{{ geoip_close (geoip_stream)
+ */
 PHP_FUNCTION(geoip_close)
 {
 	zval **ge_link;
@@ -261,7 +299,10 @@ PHP_FUNCTION(geoip_close)
 	ZEND_FETCH_RESOURCE (ge, GeoIP_API *, ge_link, -1, "GeoIP link", le_geoip);
 	zend_list_delete (Z_RESVAL_PP (ge_link));
 }
+/* }}} */
 
+/* {{{ geoip_database_info
+ */
 PHP_FUNCTION(geoip_database_info)
 {
 	zval **ge_link;
@@ -285,7 +326,36 @@ PHP_FUNCTION(geoip_database_info)
 	RETVAL_STRING (db_info, 1);
 	efree (db_info);
 }
+/* }}} */
 
+/* {{{ geoip_db_avil
+ */
+PHP_FUNCTION(geoip_db_avail)
+{
+	zval **ge_type;
+	int type = 0;
+	int res  = 0;
+
+	switch (ZEND_NUM_ARGS ()) {
+		case 1:
+			if ( zend_get_parameters_ex (1, &ge_type) == FAILURE )
+				WRONG_PARAM_COUNT;
+
+			convert_to_long_ex (ge_type);
+			type = Z_LVAL_PP (ge_type);
+
+			break;
+		default:
+			WRONG_PARAM_COUNT;
+	}
+
+	_GeoIP_setup_dbfilename();
+	RETURN_LONG(GeoIP_db_avail (type));
+}
+/* }}} */
+
+/* {{{ geoip_country_code_by_name
+ */
 PHP_FUNCTION(geoip_country_code_by_name)
 {
 	zval **ge_link, **host;
@@ -311,14 +381,15 @@ PHP_FUNCTION(geoip_country_code_by_name)
 
 	country_code = GeoIP_country_code_by_name (ge->gi, hostname);
 
-	if ( country_code == NULL ) {
-		php_error (E_WARNING, "Host %s not found", hostname);
-		RETURN_FALSE;
-	}
+	if ( country_code == NULL )
+		RETURN_EMPTY_STRING ();
 
 	RETURN_STRING ((char*) country_code, 1);
 }
+/* }}} */
 
+/* {{{ geoip_country_name_by_name
+ */
 PHP_FUNCTION(geoip_country_name_by_name)
 {
 	zval **ge_link, **host;
@@ -344,14 +415,15 @@ PHP_FUNCTION(geoip_country_name_by_name)
 	country_name = GeoIP_country_name_by_name (ge->gi, hostname);
 
    
-	if ( country_name == NULL ) {
-		php_error (E_WARNING, "Host %s not found", hostname);
-		RETURN_FALSE;
-	}
+	if ( country_name == NULL )
+		RETURN_EMPTY_STRING ();
 
 	RETURN_STRING ((char*) country_name, 1);
 }
+/* }}} */
 
+/* {{{ gepip_id_by_name
+ */
 PHP_FUNCTION(geoip_id_by_name)
 {
 	zval **ge_link, **host;
@@ -387,9 +459,88 @@ PHP_FUNCTION(geoip_id_by_name)
 	add_assoc_string (return_value, "name",
 			GeoIP_country_name[country_id] ? GeoIP_country_name[country_id] : "N/A", 1);
 }
-
 /* }}} */
 
+/* {{{ geoip_record_by_name
+ */
+PHP_FUNCTION(geoip_record_by_name)
+{
+	zval **ge_link, **host;
+	GeoIP_API *ge;
+	GeoIPRecord *gir;
+	char * hostname = NULL;
+	const char * country_name;
+
+	switch (ZEND_NUM_ARGS ()) {
+		case 2:
+			if ( zend_get_parameters_ex (2, &ge_link, &host) == FAILURE )
+				WRONG_PARAM_COUNT;
+
+			break;
+		default:
+			WRONG_PARAM_COUNT;
+	}
+
+	ZEND_FETCH_RESOURCE (ge, GeoIP_API *, ge_link, -1, "GeoIP link", le_geoip);
+
+	convert_to_string_ex (host);
+	hostname = Z_STRVAL_PP (host);
+
+	gir = GeoIP_record_by_name (ge->gi, hostname);
+
+	if ( gir == NULL )
+		RETURN_EMPTY_STRING ();
+
+	if ( array_init (return_value) == FAILURE ) {
+		php_error (E_WARNING, "Failure array init");
+		RETURN_FALSE;
+	}
+
+	add_assoc_string (return_value, "country_code", gir->country_code ? gir->country_code : "", 1);
+	add_assoc_string (return_value, "region", gir->region ? gir->region : "", 1);
+	add_assoc_string (return_value, "city", gir->city ? gir->city : "", 1);
+	add_assoc_long (return_value, "postal_code", gir->postal_code ? gir->postal_code : 0);
+	add_assoc_double (return_value, "latitude", gir->latitude ? gir->latitude : 0);
+	add_assoc_double (return_value, "longitude", gir->longitude ? gir->longitude : 0);
+	if ( ge->type == GEOIP_CITY_EDITION_REV1 ) {
+		add_assoc_long (return_value, "dma_code", gir->dma_code ? gir->dma_code : 0);
+		add_assoc_long (return_value, "area_code", gir->area_code ? gir->area_code : 0);
+	}
+}
+/* }}} */
+
+/* {{{ geoip_org_by_name
+ */
+PHP_FUNCTION(geoip_org_by_name)
+{
+	zval **ge_link, **host;
+	GeoIP_API *ge;
+	char * hostname = NULL;
+	const char * name;
+
+	switch (ZEND_NUM_ARGS ()) {
+		case 2:
+			if ( zend_get_parameters_ex (2, &ge_link, &host) == FAILURE )
+				WRONG_PARAM_COUNT;
+
+			break;
+		default:
+			WRONG_PARAM_COUNT;
+	}
+
+	ZEND_FETCH_RESOURCE (ge, GeoIP_API *, ge_link, -1, "GeoIP link", le_geoip);
+
+	convert_to_string_ex (host);
+	hostname = Z_STRVAL_PP (host);
+
+	name = GeoIP_org_by_name (ge->gi, hostname);
+
+	if ( name == NULL )
+		RETURN_EMPTY_STRING ();
+
+	RETURN_STRING ((char*) name, 1);
+}
+/* }}} */
 
 /*
  * Local variables:
