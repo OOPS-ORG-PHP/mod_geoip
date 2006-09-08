@@ -1,5 +1,11 @@
 PHP GeoIP Extension Changelog
 
+* 1.1.1
+Sat Sep  9 2006
+--------------------------------------------------------------------------------
+by JoungKyun Kim <http://www.oops.org>
+	- fixed memory leak of GeoIPCity GeoIPISP
+
 * 1.1.0
 Thu Sep  7 2006
 --------------------------------------------------------------------------------
@@ -8,6 +14,7 @@ by JoungKyun Kim <http://www.oops.org>
 	- support GeoIPISP
 	- support GeoIPCITY
 	- support GeoIPORG
+
 
 * 1.0.0
 Sun Jun 19 2006

@@ -15,7 +15,7 @@
   | Author: JoungKYun.Kim <http://www.oops.org>                          |
   +----------------------------------------------------------------------+
 
-  $Id: php_geoip.c,v 1.3 2006-09-07 13:36:03 oops Exp $
+  $Id: php_geoip.c,v 1.4 2006-09-08 16:33:35 oops Exp $
 */
 
 /*
@@ -324,7 +324,7 @@ PHP_FUNCTION(geoip_database_info)
 	db_info = GeoIP_database_info (ge->gi);
 
 	RETVAL_STRING (db_info, 1);
-	efree (db_info);
+	free (db_info);
 }
 /* }}} */
 
@@ -350,7 +350,11 @@ PHP_FUNCTION(geoip_db_avail)
 	}
 
 	_GeoIP_setup_dbfilename();
-	RETURN_LONG(GeoIP_db_avail (type));
+	RETVAL_LONG(GeoIP_db_avail (type));
+
+	for ( i = 1; i <= 11 ; i++ )
+		free (GeoIPDBFileName[i]);
+	free (GeoIPDBFileName);
 }
 /* }}} */
 
@@ -506,6 +510,8 @@ PHP_FUNCTION(geoip_record_by_name)
 		add_assoc_long (return_value, "dma_code", gir->dma_code ? gir->dma_code : 0);
 		add_assoc_long (return_value, "area_code", gir->area_code ? gir->area_code : 0);
 	}
+
+	GeoIPRecord_delete (gir);
 }
 /* }}} */
 
@@ -538,7 +544,8 @@ PHP_FUNCTION(geoip_org_by_name)
 	if ( name == NULL )
 		RETURN_EMPTY_STRING ();
 
-	RETURN_STRING ((char*) name, 1);
+	RETVAL_STRING ((char*) name, 1);
+	free (name);
 }
 /* }}} */
 
