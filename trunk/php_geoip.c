@@ -15,7 +15,7 @@
   | Author: JoungKYun.Kim <http://www.oops.org>                          |
   +----------------------------------------------------------------------+
 
-  $Id: php_geoip.c,v 1.5 2006-09-08 20:03:30 oops Exp $
+  $Id: php_geoip.c,v 1.6 2006-09-08 20:13:57 oops Exp $
 */
 
 /*
@@ -132,6 +132,8 @@ PHP_MINIT_FUNCTION(geoip)
 {
    ZEND_INIT_MODULE_GLOBALS(geoip, php_geoip_init_globals, NULL);
    REGISTER_INI_ENTRIES();
+
+   _GeoIP_setup_dbfilename();
 
    le_geoip = zend_register_list_destructors_ex (_close_geoip_link, NULL, "GeoIP link", module_number);
 
@@ -355,7 +357,6 @@ PHP_FUNCTION(geoip_db_avail)
 			WRONG_PARAM_COUNT;
 	}
 
-	_GeoIP_setup_dbfilename();
 	RETVAL_LONG(GeoIP_db_avail (type));
 }
 /* }}} */
