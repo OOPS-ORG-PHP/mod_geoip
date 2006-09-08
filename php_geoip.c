@@ -15,7 +15,7 @@
   | Author: JoungKYun.Kim <http://www.oops.org>                          |
   +----------------------------------------------------------------------+
 
-  $Id: php_geoip.c,v 1.6 2006-09-08 20:13:57 oops Exp $
+  $Id: php_geoip.c,v 1.7 2006-09-08 20:33:45 oops Exp $
 */
 
 /*
@@ -45,16 +45,16 @@ static int le_geoip;
 
 
 function_entry geoip_functions[] = {
-   PHP_FE(geoip_open,                 NULL)   
-   PHP_FE(geoip_close,                NULL)   
-   PHP_FE(geoip_database_info,        NULL)   
-   PHP_FE(geoip_db_avail,             NULL)   
-   PHP_FE(geoip_country_code_by_name, NULL)
-   PHP_FE(geoip_country_name_by_name, NULL)
-   PHP_FE(geoip_id_by_name,           NULL)
-   PHP_FE(geoip_record_by_name,       NULL)
-   PHP_FE(geoip_org_by_name,          NULL)
-   {NULL, NULL, NULL}   
+	PHP_FE(geoip_open,                 NULL)   
+	PHP_FE(geoip_close,                NULL)   
+	PHP_FE(geoip_database_info,        NULL)   
+	PHP_FE(geoip_db_avail,             NULL)   
+	PHP_FE(geoip_country_code_by_name, NULL)
+	PHP_FE(geoip_country_name_by_name, NULL)
+	PHP_FE(geoip_id_by_name,           NULL)
+	PHP_FE(geoip_record_by_name,       NULL)
+	PHP_FE(geoip_org_by_name,          NULL)
+	{NULL, NULL, NULL}   
 };
 /* }}} */
 
@@ -62,19 +62,19 @@ function_entry geoip_functions[] = {
  */
 zend_module_entry geoip_module_entry = {
 #if ZEND_MODULE_API_NO >= 20010901
-   STANDARD_MODULE_HEADER,
+	STANDARD_MODULE_HEADER,
 #endif
-   "geoip",
-   geoip_functions,
-   PHP_MINIT(geoip),
-   PHP_MSHUTDOWN(geoip),
-   PHP_RINIT(geoip),      
-   PHP_RSHUTDOWN(geoip),   
-   PHP_MINFO(geoip),
+	"geoip",
+	geoip_functions,
+	PHP_MINIT(geoip),
+	PHP_MSHUTDOWN(geoip),
+	PHP_RINIT(geoip),      
+	PHP_RSHUTDOWN(geoip),   
+	PHP_MINFO(geoip),
 #if ZEND_MODULE_API_NO >= 20010901
-   EXTENSION_VERSION, /* version number of the extension */
+	EXTENSION_VERSION, /* version number of the extension */
 #endif
-   STANDARD_MODULE_PROPERTIES
+	STANDARD_MODULE_PROPERTIES
 };
 /* }}} */
 
@@ -94,7 +94,7 @@ ZEND_GET_MODULE(geoip)
 /* {{{ PHP_INI
  */
 PHP_INI_BEGIN()
-   STD_PHP_INI_ENTRY("geoip.database_standard", GEOIPDATABASE, PHP_INI_ALL, OnUpdateString, database_standard, zend_geoip_globals, geoip_globals)
+	STD_PHP_INI_ENTRY("geoip.database_standard", GEOIPDATABASE, PHP_INI_ALL, OnUpdateString, database_standard, zend_geoip_globals, geoip_globals)
 PHP_INI_END()
 /* }}} */
 
@@ -102,7 +102,7 @@ PHP_INI_END()
  */
 static void php_geoip_init_globals(zend_geoip_globals *geoip_globals)
 {
-   geoip_globals->database_standard = NULL;
+	geoip_globals->database_standard = NULL;
 }
 /* }}} */
 
@@ -173,7 +173,7 @@ PHP_MSHUTDOWN_FUNCTION(geoip)
  */
 PHP_RINIT_FUNCTION(geoip)
 {
-   return SUCCESS;
+	return SUCCESS;
 }
 /* }}} */
 
@@ -182,7 +182,7 @@ PHP_RINIT_FUNCTION(geoip)
  */
 PHP_RSHUTDOWN_FUNCTION(geoip)
 {
-   return SUCCESS;
+	return SUCCESS;
 }
 /* }}} */
 
@@ -190,12 +190,12 @@ PHP_RSHUTDOWN_FUNCTION(geoip)
  */
 PHP_MINFO_FUNCTION(geoip)
 {
-   php_info_print_table_start();
-   php_info_print_table_header(2, "geoip support", "enabled");
-   php_info_print_table_row(2, "geoip extension version", EXTENSION_VERSION);
-   php_info_print_table_row(2, "geoip extension support", "COUNTRY,CITY,ISP,ORG");
-   php_info_print_table_end();
-   DISPLAY_INI_ENTRIES();
+	php_info_print_table_start();
+	php_info_print_table_header(2, "geoip support", "enabled");
+	php_info_print_table_row(2, "geoip extension version", EXTENSION_VERSION);
+	php_info_print_table_row(2, "geoip extension support", "COUNTRY,CITY,ISP,ORG");
+	php_info_print_table_end();
+	DISPLAY_INI_ENTRIES();
 }
 /* }}} */
 
@@ -421,7 +421,7 @@ PHP_FUNCTION(geoip_country_name_by_name)
 
 	country_name = GeoIP_country_name_by_name (ge->gi, hostname);
 
-   
+
 	if ( country_name == NULL )
 		RETURN_EMPTY_STRING ();
 
