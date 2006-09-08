@@ -35,15 +35,15 @@ $searches = array ('oops.org', 'kornet.net', 'yahoo.com');
  */
 
 /* open conutry database */
-$g = GeoIP_open ();
+$g = GeoIP_open (GEOIP_MEMORY_CACHE|GEOIP_CHECK_CACHE);
 /* open city database */
 if ( GeoIP_db_avail (GEOIP_CITY_EDITION_REV0) )
-	$gc = GeoIP_open (GEOIP_CITY_EDITION_REV0, GEOIP_MEMORY_CACHE|GEOIP_CHECK_CACHE);
+	$gc = GeoIP_open (GEOIP_CITY_EDITION_REV0, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
 /* open isp database */
 if ( GeoIP_db_avail (GEOIP_ISP_EDITION) )
-	$gi = GeoIP_open (GEOIP_ISP_EDITION, GEOIP_MEMORY_CACHE|GEOIP_CHECK_CACHE);
+	$gi = GeoIP_open (GEOIP_ISP_EDITION, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
 
-#echo "TYPE: " . geoip_database_info ($c) ."\n";
+#echo "TYPE: " . geoip_database_info ($g) ."\n";
 
 foreach ( $searches as $v ) :
 	/*

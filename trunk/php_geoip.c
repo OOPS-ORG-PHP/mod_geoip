@@ -15,14 +15,14 @@
   | Author: JoungKYun.Kim <http://www.oops.org>                          |
   +----------------------------------------------------------------------+
 
-  $Id: php_geoip.c,v 1.4 2006-09-08 16:33:35 oops Exp $
+  $Id: php_geoip.c,v 1.5 2006-09-08 20:03:30 oops Exp $
 */
 
 /*
  * PHP5 GeoIP module "geoip"
  */
 
-#define EXTENSION_VERSION "1.1.0"
+#define EXTENSION_VERSION "1.1.1"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,9 +31,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
-#include <GeoIP.h>
-#include <GeoIPCity.h>
 
 #include "php.h"
 #include "php_ini.h"
@@ -114,9 +111,18 @@ static void php_geoip_init_globals(zend_geoip_globals *geoip_globals)
 static void _close_geoip_link (zend_rsrc_list_entry *rsrc TSRMLS_DC)
 {
 	GeoIP_API *ge = (GeoIP_API *) rsrc->ptr;
+	int i;
 	GeoIP_delete (ge->gi);
 	efree (ge);
 	ge = NULL;
+
+	/*
+	if ( GeoIPDBFileName != NULL ) {
+		for ( i = 1; i <= 11 ; i++ )
+			free (GeoIPDBFileName[i]);
+		free (GeoIPDBFileName);
+	}
+	*/
 }
 /* }}} */
 
@@ -334,7 +340,7 @@ PHP_FUNCTION(geoip_db_avail)
 {
 	zval **ge_type;
 	int type = 0;
-	int res  = 0;
+	int i  = 0;
 
 	switch (ZEND_NUM_ARGS ()) {
 		case 1:
@@ -351,10 +357,6 @@ PHP_FUNCTION(geoip_db_avail)
 
 	_GeoIP_setup_dbfilename();
 	RETVAL_LONG(GeoIP_db_avail (type));
-
-	for ( i = 1; i <= 11 ; i++ )
-		free (GeoIPDBFileName[i]);
-	free (GeoIPDBFileName);
 }
 /* }}} */
 
@@ -459,9 +461,9 @@ PHP_FUNCTION(geoip_id_by_name)
 
 	add_assoc_long (return_value, "country_id", country_id);
 	add_assoc_string (return_value, "code",
-			GeoIP_country_code[country_id] ? GeoIP_country_code[country_id] : "--", 1);
+			GeoIP_country_code[country_id] ? (char *) GeoIP_country_code[country_id] : "--", 1);
 	add_assoc_string (return_value, "name",
-			GeoIP_country_name[country_id] ? GeoIP_country_name[country_id] : "N/A", 1);
+			GeoIP_country_name[country_id] ? (char *) GeoIP_country_name[country_id] : "N/A", 1);
 }
 /* }}} */
 
@@ -503,12 +505,12 @@ PHP_FUNCTION(geoip_record_by_name)
 	add_assoc_string (return_value, "country_code", gir->country_code ? gir->country_code : "", 1);
 	add_assoc_string (return_value, "region", gir->region ? gir->region : "", 1);
 	add_assoc_string (return_value, "city", gir->city ? gir->city : "", 1);
-	add_assoc_long (return_value, "postal_code", gir->postal_code ? gir->postal_code : 0);
-	add_assoc_double (return_value, "latitude", gir->latitude ? gir->latitude : 0);
-	add_assoc_double (return_value, "longitude", gir->longitude ? gir->longitude : 0);
+	add_assoc_string (return_value, "postal_code", gir->postal_code ? gir->postal_code : "", 1);
+	add_assoc_double (return_value, "latitude", gir->latitude ? gir->latitude : (double) 0);
+	add_assoc_double (return_value, "longitude", gir->longitude ? gir->longitude : (double) 0);
 	if ( ge->type == GEOIP_CITY_EDITION_REV1 ) {
-		add_assoc_long (return_value, "dma_code", gir->dma_code ? gir->dma_code : 0);
-		add_assoc_long (return_value, "area_code", gir->area_code ? gir->area_code : 0);
+		add_assoc_long (return_value, "dma_code", gir->dma_code ? gir->dma_code : (int) 0);
+		add_assoc_long (return_value, "area_code", gir->area_code ? gir->area_code : (int) 0);
 	}
 
 	GeoIPRecord_delete (gir);
@@ -522,7 +524,7 @@ PHP_FUNCTION(geoip_org_by_name)
 	zval **ge_link, **host;
 	GeoIP_API *ge;
 	char * hostname = NULL;
-	const char * name;
+	char * name;
 
 	switch (ZEND_NUM_ARGS ()) {
 		case 2:
@@ -545,7 +547,7 @@ PHP_FUNCTION(geoip_org_by_name)
 		RETURN_EMPTY_STRING ();
 
 	RETVAL_STRING ((char*) name, 1);
-	free (name);
+	free ((char *) name);
 }
 /* }}} */
 
