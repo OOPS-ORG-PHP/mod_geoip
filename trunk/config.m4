@@ -1,4 +1,4 @@
-dnl $Id: config.m4,v 1.1.1.1 2006-06-20 07:48:32 oops Exp $
+dnl $Id: config.m4,v 1.2 2008-07-15 11:35:27 oops Exp $
 dnl config.m4 for extension geoip
 
 dnl Contributed by Jonathan Whiteman of cyberflowsolutions.com
@@ -51,12 +51,12 @@ if test "$PHP_GEOIP" != "no"; then
 
   PHP_CHECK_LIBRARY($LIBNAME,$LIBSYMBOL,
   [
-    PHP_ADD_LIBRARY_WITH_PATH($LIBNAME, $GEOIP_DIR/lib, GEOIP_SHARED_LIBADD)
+    PHP_ADD_LIBRARY_WITH_PATH($LIBNAME, $GEOIP_DIR/$PHP_LIBDIR, GEOIP_SHARED_LIBADD)
     AC_DEFINE(HAVE_GEOIPLIB,1,[ ])
   ],[
     AC_MSG_ERROR([wrong geoip lib version or lib not found])
   ],[
-    -L$GEOIP_DIR/lib -lm -ldl
+    -L$GEOIP_DIR/$PHP_LIBDIR -lm -ldl
   ])
 
   PHP_SUBST(GEOIP_SHARED_LIBADD)
