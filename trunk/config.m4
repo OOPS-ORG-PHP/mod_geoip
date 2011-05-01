@@ -1,4 +1,4 @@
-dnl $Id: config.m4,v 1.2 2008-07-15 11:35:27 oops Exp $
+dnl $Id$
 dnl config.m4 for extension geoip
 
 dnl Contributed by Jonathan Whiteman of cyberflowsolutions.com
