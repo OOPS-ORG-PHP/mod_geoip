@@ -15,7 +15,7 @@
   | Author: JoungKyun.Kim <http://www.oops.org>                          |
   +----------------------------------------------------------------------+
 
-  $Id: php_geoip.h,v 1.2 2006-09-07 13:36:03 oops Exp $
+  $Id$
 */
 
 #ifndef PHP_GEOIP_H
