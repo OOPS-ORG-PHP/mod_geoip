@@ -1,20 +1,26 @@
 PHP GeoIP Extension Changelog
 
 * 1.1.2
-Tue Jul 15 2008
 --------------------------------------------------------------------------------
+Fri Nov  2 2012
+by JoungKyun Kim <http://oops.org>
+	- support PHP 5.4
+
+Tue Jul 15 2008
 by JoungKyun Kim <http://oops.org>
 	- support 64bit library check
 
+
 * 1.1.1
-Sat Sep  9 2006
 --------------------------------------------------------------------------------
+Sat Sep  9 2006
 by JoungKyun Kim <http://oops.org>
 	- fixed memory leak of GeoIPCity GeoIPISP
 
+
 * 1.1.0
-Thu Sep  7 2006
 --------------------------------------------------------------------------------
+Thu Sep  7 2006
 by JoungKyun Kim <http://oops.org>
 	- fixed memory leak
 	- support GeoIPISP
@@ -23,8 +29,8 @@ by JoungKyun Kim <http://oops.org>
 
 
 * 1.0.0
-Sun Jun 19 2006
 --------------------------------------------------------------------------------
+Sun Jun 19 2006
 by JoungKyun Kim <http://oops.org>
 	- first build
 	- config.m4 used maxmind's
