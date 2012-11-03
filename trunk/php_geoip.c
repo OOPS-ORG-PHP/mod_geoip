@@ -22,7 +22,7 @@
  * PHP5 GeoIP module "geoip"
  */
 
-#define EXTENSION_VERSION "1.1.1"
+#define EXTENSION_VERSION "1.1.2"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -336,7 +336,7 @@ PHP_FUNCTION(geoip_database_info)
 }
 /* }}} */
 
-/* {{{ geoip_db_avil
+/* {{{ geoip_db_avail
  */
 PHP_FUNCTION(geoip_db_avail)
 {
