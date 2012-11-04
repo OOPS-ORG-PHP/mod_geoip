@@ -1,8 +1,15 @@
 #!/usr/bin/php
-<?
+<?php
 
-if ( ! extension_loaded ('geoip') )
-	dl ("geoip.so");
+if ( ! extension_loaded ('geoip') ) {
+	if ( version_compare (PHP_VERSION, '5.4.0', '>=') ) {
+		fprintf (STDERR, "GeoIP extension is not loaded\n");
+		exit (1);
+	} else if ( version_compare (PHP_VERSION, '5.3.0', '>=') )
+		dl ('geoip.so');
+	else
+		dl ('modules/geoip.so');
+}
 
 $searches = array ('oops.org', 'kornet.net', 'yahoo.com');
 

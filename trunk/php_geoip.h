@@ -68,6 +68,7 @@ ZEND_END_MODULE_GLOBALS(geoip)
 typedef struct geo_resource {
 	GeoIP *gi;
 	int type;
+	int rsrc;
 } GeoIP_API;
 
 #endif /* PHP_GEOIP_H */
