@@ -2,6 +2,10 @@ PHP GeoIP Extension Changelog
 
 * 1.1.2
 --------------------------------------------------------------------------------
+Sun Nov  3 2012
+by JoungKyun Kim <http://oops.org>
+	- fixed deprecated zend_get_parameters_ex
+
 Fri Nov  2 2012
 by JoungKyun Kim <http://oops.org>
 	- support PHP 5.4
