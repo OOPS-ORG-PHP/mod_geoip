@@ -61,6 +61,8 @@ if test "$PHP_GEOIP" != "no"; then
 
   PHP_SUBST(GEOIP_SHARED_LIBADD)
 
-  PHP_NEW_EXTENSION(geoip, php_geoip.c, $ext_shared)
+  extra_src=""
+
+  PHP_NEW_EXTENSION(geoip, php_geoip.c $extra_src, $ext_shared)
 fi
 
