@@ -1,8 +1,8 @@
 /**
- * Project: mod_geoip :: GEOIP database php extension
+ * Project: mod_geoip :: GeoIP php exntension
  * File:    php_geoip_class.c
  *
- * Copyright (c) 1997-2010 JoungKyun.Kim
+ * Copyright (c) 2012 JoungKyun.Kim
  *
  * LICENSE: GPL
  *
@@ -10,11 +10,11 @@
  * @package     mod_geoip
  * @author      JoungKyun.Kim <http://oops.org>
  * @copyright   2012 OOPS.org
- * @license     LGPL
- * @version     CVS: $Id: php_geoip.c 73 2012-11-04 15:07:37Z oops $
- * @link        http://pear.oops.org/package/geoip
+ * @license     GPL
+ * @version     SVN: $Id$
  * @since       File available since release 0.0.1
  */
+
 
 /*
  * PHP5 Korea IPS Class API
