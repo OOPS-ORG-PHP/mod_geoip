@@ -1,15 +1,8 @@
 #!/usr/bin/php
-<?php
+<?
 
-if ( ! extension_loaded ('geoip') ) {
-	if ( version_compare (PHP_VERSION, '5.4.0', '>=') ) {
-		fprintf (STDERR, "GeoIP extension is not loaded\n");
-		exit (1);
-	} else if ( version_compare (PHP_VERSION, '5.3.0', '>=') )
-		dl ('geoip.so');
-	else
-		dl ('modules/geoip.so');
-}
+if ( ! extension_loaded ('geoip') )
+	dl ("geoip.so");
 
 $searches = array ('oops.org', 'kornet.net', 'yahoo.com');
 
@@ -42,15 +35,15 @@ $searches = array ('oops.org', 'kornet.net', 'yahoo.com');
  */
 
 /* open conutry database */
-$g = GeoIP_open (GEOIP_MEMORY_CACHE|GEOIP_CHECK_CACHE);
+$g = GeoIP_open ();
 /* open city database */
 if ( GeoIP_db_avail (GEOIP_CITY_EDITION_REV0) )
-	$gc = GeoIP_open (GEOIP_CITY_EDITION_REV0, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
+	$gc = GeoIP_open (GEOIP_CITY_EDITION_REV0, GEOIP_MEMORY_CACHE|GEOIP_CHECK_CACHE);
 /* open isp database */
 if ( GeoIP_db_avail (GEOIP_ISP_EDITION) )
-	$gi = GeoIP_open (GEOIP_ISP_EDITION, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
+	$gi = GeoIP_open (GEOIP_ISP_EDITION, GEOIP_MEMORY_CACHE|GEOIP_CHECK_CACHE);
 
-#echo "TYPE: " . geoip_database_info ($g) ."\n";
+#echo "TYPE: " . geoip_database_info ($c) ."\n";
 
 foreach ( $searches as $v ) :
 	/*
