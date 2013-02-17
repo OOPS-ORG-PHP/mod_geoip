@@ -10,7 +10,7 @@ if ( ! extension_loaded ('geoip') ) {
 		dl ('modules/geoip.so');
 }
 
-$searches = array ('oops.org', 'kornet.net', 'yahoo.com');
+$searches = array ('www.example.com', 'oops.org', 'kornet.net', 'yahoo.com');
 
 /*
  * GeoIP::__construct (database, flag)
@@ -99,7 +99,7 @@ try {
 		 */
 		if ( GeoIP_db_avail (GEOIP_ISP_EDITION) ) {
 			$ri = $gi->org_by_name ($v);
-			echo "    $ri\n";
+			echo "ISP NAME: $ri\n";
 		}
 
 		#echo "### " . $g->country_code_by_name ($v) . "\n";
