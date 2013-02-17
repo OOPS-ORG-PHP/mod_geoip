@@ -212,7 +212,7 @@ PHP_MINFO_FUNCTION(geoip)
 }
 /* }}} */
 
-/* {{{ geoip_open (database|database_type, flag)
+/* {{{ proto (resource) geoip_open ([string database|int database_type[, int flag]])
  */
 PHP_FUNCTION(geoip_open)
 {
@@ -318,7 +318,7 @@ PHP_FUNCTION(geoip_open)
 }
 /* }}} */
 
-/* {{{ geoip_close (geoip_stream)
+/* {{{ proto (bool) geoip_close (resource link)
  */
 PHP_FUNCTION(geoip_close)
 {
@@ -347,7 +347,7 @@ PHP_FUNCTION(geoip_close)
 }
 /* }}} */
 
-/* {{{ geoip_database_info
+/* {{{ proto (string) geoip_database_info (resource link)
  */
 PHP_FUNCTION(geoip_database_info)
 {
@@ -384,7 +384,7 @@ PHP_FUNCTION(geoip_database_info)
 }
 /* }}} */
 
-/* {{{ geoip_db_avail
+/* {{{ proto (long) geoip_db_avail (int type)
  */
 PHP_FUNCTION(geoip_db_avail)
 {
@@ -397,7 +397,7 @@ PHP_FUNCTION(geoip_db_avail)
 }
 /* }}} */
 
-/* {{{ geoip_country_code_by_name
+/* {{{ proto (string) geoip_country_code_by_name (resource link, string hostname)
  */
 PHP_FUNCTION(geoip_country_code_by_name)
 {
@@ -452,7 +452,7 @@ PHP_FUNCTION(geoip_country_code_by_name)
 }
 /* }}} */
 
-/* {{{ geoip_country_name_by_name
+/* {{{ proto (string) geoip_country_name_by_name (resource link, string hostname)
  */
 PHP_FUNCTION(geoip_country_name_by_name)
 {
@@ -507,7 +507,7 @@ PHP_FUNCTION(geoip_country_name_by_name)
 }
 /* }}} */
 
-/* {{{ gepip_id_by_name
+/* {{{ proto (array|false) gepip_id_by_name (resource link, string hostname)
  */
 PHP_FUNCTION(geoip_id_by_name)
 {
@@ -570,7 +570,7 @@ PHP_FUNCTION(geoip_id_by_name)
 }
 /* }}} */
 
-/* {{{ geoip_record_by_name
+/* {{{ proto (array|false) geoip_record_by_name (resource link, string hostname))
  */
 PHP_FUNCTION(geoip_record_by_name)
 {
@@ -645,7 +645,7 @@ PHP_FUNCTION(geoip_record_by_name)
 }
 /* }}} */
 
-/* {{{ geoip_org_by_name
+/* {{{ proto (string) geoip_org_by_name (resource link, string hostname)
  */
 PHP_FUNCTION(geoip_org_by_name)
 {
