@@ -1,0 +1,2 @@
+1. input vimfiles/doc
+2. vim -c "helptags path/vimfile/doc" -c "q"

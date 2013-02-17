@@ -1,0 +1,48 @@
+*geoip_open* -- Get GeoIP database handle
+
+  resource geoip_open ([string path|int dataase[, int flag]])~
+
+The |geoip_open| function will return resource of geoip database.
+
+{path}     The path of GeoIP database
+{database}
+           GEOIP_COUNTRY_EDITION    -> default
+           GEOIP_ISP_EDITION        -> isp database (if you have)
+           GEOIP_CITY_EDITION_REV0  -> city database (if you have)
+           GEOIP_CITY_EDITION_REV1  -> city database (if you have)
+           GEOIP_ORG_EDITION        -> org database (if you have)
+{flag}
+           GEOIP_STANDARD
+           GEOIP_MEMORY_CACHE
+           GEOIP_CHECK_CACHE
+           GEOIP_INDEX_CACHE
+
+Returns database resource on success, or FALSE
+
+A |geoip_open| example This will open database resource about GeoIP, GeoIPISP,
+GeoIPCity.
+
+<?php >
+  $g = GeoIP_open (GEOIP_MEMORY_CACHE|GEOIP_CHECK_CACHE);
+  /* open city database */
+  if ( GeoIP_db_avail (GEOIP_CITY_EDITION_REV0) )
+      $gc = GeoIP_open (GEOIP_CITY_EDITION_REV0, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
+  /* open isp database */
+  if ( GeoIP_db_avail (GEOIP_ISP_EDITION) )
+      $gi = GeoIP_open (GEOIP_ISP_EDITION, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
+
+  echo "Database open .. ";
+  if ( is_resource ($g) )
+      echo "success\n";
+  else
+      echo "failure\n";
+?>
+
+The above example will output:
+
+  Database open .. Success
+
+|geoip_close|
+
+
+vim:ft=help:
