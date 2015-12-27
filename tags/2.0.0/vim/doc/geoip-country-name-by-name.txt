@@ -1,0 +1,37 @@
+*geoip_country_name_by_name* -- Get the full country name
+
+  string geoip_country_name_by_name(resource link, string hostname)~
+
+|mysql_close|
+
+The |geoip_country_name_by_name| function will return the full country name
+corresponding to a hostname or an IP address.
+
+{link}     The resource of GeoIP database that returns |geoip_open|
+{hostname} The hostname or IP address whose location is to be looked-up.
+
+Returns the country name on success, or empty string if the address cannot
+be found in the database.
+
+A |geoip_country_name_by_name| example This will print where the host
+example.com is located.
+
+<?php >
+  $g = geoip_open (GEOIP_MEMORY_CACHE|GEOIP_CHECK_CACHE);
+  $country = geoip_country_name_by_name ($gi, 'www.example.com');
+  if ($country) {
+      echo 'This host is located in: ' . $country;
+  }
+  geoip_close($g);
+?>
+
+The above example will output:
+
+  This host is located in: United States
+
+
+
+|geoip_open| |geoip_country_code_by_name| |geoip_country_code3_by_name|
+|gepio_close|
+
+vim:ft=help:
