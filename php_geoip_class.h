@@ -14,8 +14,7 @@ const zend_function_entry geoip_methods_exception[] = {
 /* Exception declear {{{
  *
  */
-#if PHP_MAJOR_VERSION >= 5
-#if defined(HAVE_SPL) && ((PHP_MAJOR_VERSION > 5) || (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION >= 1))
+#if defined(HAVE_SPL)
 extern PHPAPI zend_class_entry *spl_ce_RuntimeException;
 extern PHPAPI zend_class_entry *spl_ce_Countable;
 #endif
@@ -24,14 +23,10 @@ extern PHPAPI zend_class_entry *spl_ce_Countable;
 	zend_replace_error_handling ( \
 		object ? EH_THROW : EH_NORMAL, \
 		geoip_ce_exception, \
-		&error_handling TSRMLS_CC \
+		&error_handling \
 	)
 
-#define GEOIP_RESTORE_ERROR_HANDLING zend_restore_error_handling (&error_handling TSRMLS_CC)
-#else
-#define GEOIP_REPLACE_ERROR_HANDLIN0 int geoip_error_dummy_handing = 1
-#define GEOIP_RESTORE_ERROR_HANDLING geoip_error_dummy_handing = 0
-#endif
+#define GEOIP_RESTORE_ERROR_HANDLING zend_restore_error_handling (&error_handling)
 /* }}} */
 
 /* {{{ geoip_deps[]
@@ -39,7 +34,7 @@ extern PHPAPI zend_class_entry *spl_ce_Countable;
  * GEOIP dependancies
  */
 const zend_module_dep geoip_deps[] = {
-#if defined(HAVE_SPL) && ((PHP_MAJOR_VERSION > 5) || (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION >= 1))
+#if defined(HAVE_SPL)
 	ZEND_MOD_REQUIRED("spl")
 #endif
 	{NULL, NULL, NULL}
@@ -64,10 +59,10 @@ const zend_function_entry geoip_methods[] = {
 	zend_class_entry ce; \
 	INIT_CLASS_ENTRY (ce, "GeoIP", geoip_methods); \
 	ce.create_object = geoip_object_new_main; \
-	geoip_ce = zend_register_internal_class_ex (&ce, parent, NULL TSRMLS_CC); \
+	geoip_ce = zend_register_internal_class_ex (&ce, parent); \
 	memcpy(&geoip_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers)); \
 	geoip_object_handlers.clone_obj = NULL; \
-	geoip_ce->ce_flags |= ZEND_ACC_FINAL_CLASS; \
+	geoip_ce->ce_flags |= ZEND_ACC_FINAL; \
 }
 
 
@@ -75,10 +70,10 @@ const zend_function_entry geoip_methods[] = {
 	zend_class_entry ce; \
 	INIT_CLASS_ENTRY(ce, "GeoIP" # name, geoip_methods_ ## c_name); \
 	ce.create_object = geoip_object_new_ ## c_name; \
-	geoip_ce_ ## c_name = zend_register_internal_class_ex(&ce, parent, NULL TSRMLS_CC); \
+	geoip_ce_ ## c_name = zend_register_internal_class_ex(&ce, parent); \
 	memcpy(&geoip_object_handlers_ ## c_name, zend_get_std_object_handlers(), sizeof(zend_object_handlers)); \
 	geoip_object_handlers_ ## c_name.clone_obj = NULL; \
-	geoip_ce_ ## c_name->ce_flags |= ZEND_ACC_FINAL_CLASS; \
+	geoip_ce_ ## c_name->ce_flags |= ZEND_ACC_FINAL; \
 }
 
 zend_class_entry * geoip_ce;

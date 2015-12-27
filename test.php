@@ -50,6 +50,9 @@ if ( GeoIP_db_avail (GEOIP_CITY_EDITION_REV0) )
 if ( GeoIP_db_avail (GEOIP_ISP_EDITION) )
 	$gi = GeoIP_open (GEOIP_ISP_EDITION, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
 
+if ( ! is_resource ($g) )
+	exit;
+
 #echo "TYPE: " . geoip_database_info ($g) ."\n";
 
 foreach ( $searches as $v ) :
