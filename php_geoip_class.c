@@ -11,7 +11,7 @@
  * @author      JoungKyun.Kim <http://oops.org>
  * @copyright   2015 OOPS.org
  * @license     GPL
- * @version     SVN: $Id$
+ * @version     SVN: $Id: php_geoip_class.c 26 2015-12-27 18:31:40Z oops $
  * @since       File available since release 0.0.1
  */
 

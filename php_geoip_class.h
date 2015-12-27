@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: php_geoip_class.h 26 2015-12-27 18:31:40Z oops $
  */
 
 #ifndef PHP_GEOIP_CLASS_H
