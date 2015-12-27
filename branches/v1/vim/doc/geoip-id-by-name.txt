@@ -1,0 +1,42 @@
+*geoip_id_by_name* -- Get the Internet connection type
+
+  int geoip_id_by_name(resource link, string hostname)~
+
+The |geoip_id_by_name| function will return the country id, code and name
+corresponding to a hostname or an IP address.
+
+The return value is array that have members of country_id, code and name.
+
+{link}     The resource of GeoIP database that returns |geoip_open|
+{hostname} The hostname or IP address whose connection type is to be
+           looked-up.
+
+Returns the country(or isp or city) id, code and name, or FALSE if the address
+cannot be found in the database.
+
+A |geoip_id_by_name| example This will output the connection type of the host
+example.com.
+
+<?php >
+  $g = geoip_open (GEOIP_MEMORY_CACHE|GEOIP_CHECK_CACHE);
+  $info = (object) geoip_id_by_name ($g, 'www.example.com');
+  geoip_close ($g);
+  
+  echo "The information of www.example.com :\n";
+  echo " * Country ID   : {$info->country_id}\n";
+  echo " * Country Code : {$info->code}\n";
+  echo " * Country Name : {$info->name}\n";
+?>
+
+The above example will output:
+
+  The information of www.example.com :
+    * Country ID   : 225
+    * Country Code : US
+    * Country Name : United States
+
+|geoip_open| |geoip_close|
+
+
+
+vim:ft=help:

@@ -1,0 +1,19 @@
+*geoip_close* -- Close the GeoIP database handle
+
+  bool geoip_close (resource link)~
+
+The |geoip_close| function will close the GeoIP database handle
+
+A |geoip_close| exampl
+string.
+
+<?php >
+  $g = GeoIP_open (GEOIP_MEMORY_CACHE|GEOIP_CHECK_CACHE);
+  if ( is_resource ($g) )
+    geoip_close ($g);
+?>
+
+|geoip_open|
+
+
+vim:ft=help:

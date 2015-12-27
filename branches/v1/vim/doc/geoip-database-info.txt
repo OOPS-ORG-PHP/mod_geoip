@@ -1,0 +1,29 @@
+*geoip_database_info* -- Get GeoIP Database information
+
+  string geoip_database_info(resource link)~
+
+The |geoip_database_info| function returns the corresponding GeoIP Database
+version as it is defined inside the binary file.
+
+{link} The resource of GeoIP database that returns |geoip_open|
+
+Returns the corresponding database version, or NULL on error.
+
+A |geoip_region_by_name| example This will output the current database version
+string.
+
+<?php >
+  $g = geoip_open (GEOIP_MEMORY_CACHE|GEOIP_CHECK_CACHE);
+  print geoip_database_info ($g);
+  geoip_close ($g);
+?>
+
+The above example will output:
+
+  GEO-106FREE 20060801 Build 1 Copyright (c) 2006 MaxMind LLC All Rights Reserved
+
+
+|geoip_open| |geoip_close|
+
+
+vim:ft=help:
