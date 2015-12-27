@@ -50,11 +50,17 @@ ZEND_END_MODULE_GLOBALS(geoip)
 #endif
 
 typedef struct geo_resource {
+	// for Class
+	zend_resource *rsrc;
 	GeoIP *gi;
 	int type;
-	int rsrc;
 } GeoIP_API;
 
+#define GEOIP_FETCH_RESOURCE(a,b,c,d,e) \
+	if ( (a = (b) zend_fetch_resource_ex (c, d, e)) == NULL ) \
+		RETURN_FALSE
+
+#define ZARGC ZEND_NUM_ARGS()
 #endif /* PHP_GEOIP_H */
 
 
