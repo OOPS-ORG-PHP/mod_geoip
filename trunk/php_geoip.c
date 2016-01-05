@@ -266,7 +266,7 @@ PHP_FUNCTION(geoip_open)
 			if ( Z_TYPE_P (database) == IS_STRING ) {
 				dbname = Z_STRVAL_P (database);
 				if ( ! strlen (dbname) ) {
-					php_error (E_WARNING, "First argument is empty");
+					php_error_docref (NULL, E_WARNING, "First argument is empty");
 					GEOIP_RESTORE_ERROR_HANDLING;
 					RETURN_FALSE;
 				}
@@ -274,7 +274,7 @@ PHP_FUNCTION(geoip_open)
 				r = stat (dbname, &f);
 
 				if ( r == -1 || f.st_size < 1 ) {
-					php_error (E_WARNING, "%s is invalid path", dbname);
+					php_error_docref (NULL, E_WARNING, "%s is invalude path", dbname);
 					GEOIP_RESTORE_ERROR_HANDLING;
 					RETURN_FALSE;
 				}
@@ -289,7 +289,7 @@ PHP_FUNCTION(geoip_open)
 				dbtype = Z_LVAL_P (database);
 				dbl = -1;
 			} else {
-				php_error (E_WARNING, "First argument is must string or numeric.");
+				php_error_docref (NULL, E_WARNING, "First argument is must string or numeric.");
 				GEOIP_RESTORE_ERROR_HANDLING;
 				RETURN_FALSE;
 			}
@@ -469,7 +469,7 @@ PHP_FUNCTION(geoip_country_code_by_name)
 	}
 
 	if ( ZSTR_LEN (host) == 0 ) {
-		php_error (E_WARNING, "geoip_country_name_by_name: 2th argument is empty");
+		php_error_docref (NULL, E_WARNING, "geoip_country_name_by_name: 2th argument is empty");
 		GEOIP_RESTORE_ERROR_HANDLING;
 		RETURN_EMPTY_STRING ();
 	}
@@ -525,7 +525,7 @@ PHP_FUNCTION(geoip_country_name_by_name)
 	}
 
 	if ( ZSTR_LEN (host) == 0 ) {
-		php_error (E_WARNING, "geoip_country_name_by_name: 2th argument is empty");
+		php_error_docref (NULL, E_WARNING, "geoip_country_name_by_name: 2th argument is empty");
 		RETURN_EMPTY_STRING ();
 	}
 
@@ -581,7 +581,7 @@ PHP_FUNCTION(geoip_id_by_name)
 	}
 
 	if ( ZSTR_LEN (host) == 0 ) {
-		php_error (E_WARNING, "geoip_id_by_name: 2th argument is empty");
+		php_error_docref (NULL, E_WARNING, "geoip_id_by_name: 2th argument is empty");
 		GEOIP_RESTORE_ERROR_HANDLING;
 		RETURN_FALSE;
 	}
@@ -601,7 +601,7 @@ PHP_FUNCTION(geoip_id_by_name)
 	country_id = GeoIP_id_by_name (ge->gi, ZSTR_VAL (host));
 
 	if ( array_init (return_value) == FAILURE ) {
-		php_error (E_WARNING, "geoip_id_by_name: Failure array init");
+		php_error_docref (NULL, E_WARNING, "geoip_id_by_name: Failure array init");
 		GEOIP_RESTORE_ERROR_HANDLING;
 		RETURN_FALSE;
 	}
@@ -646,7 +646,7 @@ PHP_FUNCTION(geoip_record_by_name)
 	}
 
 	if ( ZSTR_LEN (host) == 0 ) {
-		php_error (E_WARNING, "geoip_record_by_name: 2th argument is empty");
+		php_error_docref (NULL, E_WARNING, "geoip_record_by_name: 2th argument is empty");
 		GEOIP_RESTORE_ERROR_HANDLING;
 		RETURN_FALSE;
 	}
@@ -671,7 +671,7 @@ PHP_FUNCTION(geoip_record_by_name)
 	}
 
 	if ( array_init (return_value) == FAILURE ) {
-		php_error (E_WARNING, "geoip_record_by_name: Failure array init");
+		php_error_docref (NULL, E_WARNING, "geoip_record_by_name: Failure array init");
 		GEOIP_RESTORE_ERROR_HANDLING;
 		RETURN_FALSE;
 	}
@@ -721,7 +721,7 @@ PHP_FUNCTION(geoip_org_by_name)
 	}
 
 	if ( ZSTR_LEN (host) == 0 ) {
-		php_error (E_WARNING, "geoip_org_by_name: 2th argument is empty");
+		php_error_docref (NULL, E_WARNING, "geoip_org_by_name: 2th argument is empty");
 		GEOIP_RESTORE_ERROR_HANDLING;
 		RETURN_EMPTY_STRING ();
 	}
