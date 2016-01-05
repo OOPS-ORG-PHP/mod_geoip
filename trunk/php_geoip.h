@@ -60,6 +60,21 @@ typedef struct geo_resource {
 	if ( (a = (b) zend_fetch_resource_ex (c, d, e)) == NULL ) \
 		RETURN_FALSE
 
+#define gemalloc emalloc
+#define gfree(x) if (x!=NULL) { free (x); x = NULL; }
+#define gefree(x) if (x!=NULL) { efree (x); x = NULL; }
+
+//define GEOIP_DEBUG
+#ifdef GEOIP_DEBUG
+#	define GE_PRINT_CALL_API_NAME php_printf ("*** ---------------> Call %s (%s:%d)\n", __func__, __FILE__, __LINE__)
+#	define ge_printf(...) \
+		php_printf ("    "); \
+		php_printf (__VA_ARGS__)
+#else
+#	define GE_PRINT_CALL_API_NAME
+#	define ge_printf
+#endif
+
 #define ZARGC ZEND_NUM_ARGS()
 #endif /* PHP_GEOIP_H */
 

@@ -34,6 +34,8 @@ static int geoip_free_persistent (zend_resource * le, void * ptr) {
 static void geoip_object_free_storage (zend_object * object) {
 	geoip_object * intern = (geoip_object *) geoip_fetch_object (object);
 
+	GE_PRINT_CALL_API_NAME;
+
 	zend_object_std_dtor (&intern->std);
 
 	if ( intern->u.ptr ) {
@@ -47,13 +49,15 @@ static void geoip_object_free_storage (zend_object * object) {
 		}
 	}
 
-	efree(object);
+	gefree(object);
 }
 
 static void geoip_object_new (zend_class_entry *class_type, zend_object_handlers *handlers, zend_object **retval TSRMLS_DC)
 {
 	geoip_object * intern;
 	zval  * tmp;
+
+	GE_PRINT_CALL_API_NAME;
 
 	intern = ecalloc (1, sizeof (geoip_object) + zend_object_properties_size (class_type));
 	zend_object_std_init (&intern->std,class_type TSRMLS_CC);
@@ -67,12 +71,16 @@ static void geoip_object_new (zend_class_entry *class_type, zend_object_handlers
 static zend_object * geoip_object_new_main (zend_class_entry * class_type TSRMLS_DC) {
 	zend_object * retval;
 
+	GE_PRINT_CALL_API_NAME;
+
 	geoip_object_new (class_type, &geoip_object_handlers, &retval TSRMLS_CC);
 	return retval;
 }
 
 static zend_object * geoip_object_new_exception (zend_class_entry * class_type TSRMLS_DC) {
 	zend_object * retval;
+
+	GE_PRINT_CALL_API_NAME;
 
 	geoip_object_new (class_type, &geoip_object_handlers_exception, &retval TSRMLS_CC);
 	return retval;

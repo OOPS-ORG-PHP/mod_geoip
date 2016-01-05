@@ -117,19 +117,22 @@ static void php_geoip_init_globals(zend_geoip_globals *geoip_globals)
  */
 static void _close_geoip_link (zend_resource *rsrc TSRMLS_DC)
 {
-	GeoIP_API *ge = (GeoIP_API *) rsrc->ptr;
-	int i;
-	GeoIP_delete (ge->gi);
-	efree (ge);
-	ge = NULL;
+	GE_PRINT_CALL_API_NAME;
 
-	/*
-	if ( GeoIPDBFileName != NULL ) {
-		for ( i = 1; i <= 11 ; i++ )
-			free (GeoIPDBFileName[i]);
-		free (GeoIPDBFileName);
+	if ( ! rsrc )
+		return;
+
+	if ( rsrc->ptr ) {
+		GeoIP_API *ge = (GeoIP_API *) rsrc->ptr;
+		ge_printf ("ge before free             : %ld\n", ge);
+		ge_printf ("ge before free             : %ld\n", ge->gi);
+		GeoIP_delete (ge->gi);
+		ge->gi = NULL;
+		ge_printf ("ge after free              : %ld\n", ge->gi);
+		gefree (ge);
+		ge_printf ("ge after free              : %ld\n", ge);
 	}
-	*/
+
 }
 /* }}} */
 
@@ -137,12 +140,14 @@ static void _close_geoip_link (zend_resource *rsrc TSRMLS_DC)
  */
 PHP_MINIT_FUNCTION(geoip)
 {
+	GE_PRINT_CALL_API_NAME;
+
 	ZEND_INIT_MODULE_GLOBALS(geoip, php_geoip_init_globals, NULL);
 	REGISTER_INI_ENTRIES();
 
 	_GeoIP_setup_dbfilename();
 
-	le_geoip = zend_register_list_destructors_ex (NULL, _close_geoip_link, "GeoIP link", module_number);
+	le_geoip = zend_register_list_destructors_ex (_close_geoip_link, NULL, "GeoIP link", module_number);
 
 	/* {{{ Class declear */
 	REGISTER_GEOIP_CLASS(NULL);
@@ -181,6 +186,17 @@ PHP_MINIT_FUNCTION(geoip)
  */
 PHP_MSHUTDOWN_FUNCTION(geoip)
 {
+#if LIBGEOIP_VERSION >= 1004007
+	GeoIP_cleanup ();
+#else
+	if ( GeoIPDBFileName != NULL ) {
+		int i;
+		for ( i=0; i<NUM_DB_TYPES; i++ ) {
+			gfree (GeoIPDBFileName[i]);
+		}
+		gfree(GeoIPDBFileName);
+	}
+#endif
 	return SUCCESS;
 }
 /* }}} */
@@ -233,6 +249,8 @@ PHP_FUNCTION(geoip_open)
 
 	GeoIP_API * ge;
 	geoip_object * obj;
+
+	GE_PRINT_CALL_API_NAME;
 
 	if ( object ) {
 		obj = Z_GEOIP_P (object);
@@ -299,17 +317,20 @@ PHP_FUNCTION(geoip_open)
 	}
 	*/
 
-	ge = (GeoIP_API *) emalloc (sizeof (GeoIP_API));
+	ge = (GeoIP_API *) gemalloc (sizeof (GeoIP_API));
+	ge_printf ("ge                         : %ld\n", ge);
 
 	ge->type = dbtype;
 
 	if ( ! dbl ) {
 		ge->gi = GeoIP_new (flag);
+		ge_printf ("ge->gi                     : %ld\n", ge->gi);
 	} else {
 		if ( dbl != -1 )
 			ge->gi = GeoIP_open (dbname, flag);
 		else
 			ge->gi = GeoIP_open_type (dbtype, flag);
+		ge_printf ("ge->gi                     : %ld\n", ge->gi);
 	}
 
 	if ( ge->gi == NULL ) {
@@ -338,6 +359,8 @@ PHP_FUNCTION(geoip_close)
 	geoip_object * obj;
 	zend_error_handling error_handling;
 
+	GE_PRINT_CALL_API_NAME;
+
 	if ( object ) {
 		obj = (geoip_object *) Z_GEOIP_P (object);
 		ge = obj->u.db;
@@ -349,6 +372,8 @@ PHP_FUNCTION(geoip_close)
 			return;
 
 		GEOIP_FETCH_RESOURCE (ge, GeoIP_API *, ge_link, "GeoIP link", le_geoip);
+		ge_printf ("ge                         : %ld\n", ge);
+		ge_printf ("ge->gi                     : %ld\n", ge->gi);
 		zend_list_delete (Z_RES_P (ge_link));
 	}
 
@@ -367,6 +392,8 @@ PHP_FUNCTION(geoip_database_info)
 	zval         * object = getThis ();
 	geoip_object * obj;
 	zend_error_handling error_handling;
+
+	GE_PRINT_CALL_API_NAME;
 
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
@@ -388,7 +415,7 @@ PHP_FUNCTION(geoip_database_info)
 	db_info = GeoIP_database_info (ge->gi);
 
 	RETVAL_STRING (db_info);
-	free (db_info);
+	gfree (db_info);
 	GEOIP_RESTORE_ERROR_HANDLING;
 }
 /* }}} */
@@ -398,6 +425,8 @@ PHP_FUNCTION(geoip_database_info)
 PHP_FUNCTION(geoip_db_avail)
 {
 	zend_long type = 0;
+
+	GE_PRINT_CALL_API_NAME;
 
 	if ( zend_parse_parameters (ZARGC, "l", &type) == FAILURE )
 		return;
@@ -418,6 +447,8 @@ PHP_FUNCTION(geoip_country_code_by_name)
 	zval         * object = getThis ();
 	geoip_object * obj;
 	zend_error_handling error_handling;
+
+	GE_PRINT_CALL_API_NAME;
 
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
@@ -473,6 +504,8 @@ PHP_FUNCTION(geoip_country_name_by_name)
 	geoip_object * obj;
 	zend_error_handling error_handling;
 
+	GE_PRINT_CALL_API_NAME;
+
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
 		if ( zend_parse_parameters (ZARGC, "S", &host) == FAILURE ) {
@@ -526,6 +559,8 @@ PHP_FUNCTION(geoip_id_by_name)
 	zval         * object = getThis ();
 	geoip_object * obj;
 	zend_error_handling error_handling;
+
+	GE_PRINT_CALL_API_NAME;
 
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
@@ -589,6 +624,8 @@ PHP_FUNCTION(geoip_record_by_name)
 	zval         * object = getThis ();
 	geoip_object * obj;
 	zend_error_handling error_handling;
+
+	GE_PRINT_CALL_API_NAME;
 
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
@@ -663,6 +700,8 @@ PHP_FUNCTION(geoip_org_by_name)
 	geoip_object * obj;
 	zend_error_handling error_handling;
 
+	GE_PRINT_CALL_API_NAME;
+
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
 		if ( zend_parse_parameters (ZARGC, "S", &host) == FAILURE ) {
@@ -701,7 +740,7 @@ PHP_FUNCTION(geoip_org_by_name)
 	}
 
 	RETVAL_STRING ((char*) name);
-	free ((char *) name);
+	gfree (name);
 	GEOIP_RESTORE_ERROR_HANDLING;
 }
 /* }}} */
