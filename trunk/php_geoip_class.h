@@ -21,10 +21,11 @@ extern PHPAPI zend_class_entry *spl_ce_Countable;
 
 #define GEOIP_REPLACE_ERROR_HANDLING \
 	zend_replace_error_handling ( \
-		object ? EH_THROW : EH_NORMAL, \
+		EH_THROW, \
 		geoip_ce_exception, \
 		&error_handling \
 	)
+//		object ? EH_THROW : EH_NORMAL, \
 
 #define GEOIP_RESTORE_ERROR_HANDLING zend_restore_error_handling (&error_handling)
 /* }}} */
