@@ -6,6 +6,7 @@ PHP GeoIP Extension Changelog
 Wed Jan  6 2016
 by JoungKyun Kim <http://oops.org>
 	- fixed memory leak
+	- fixed remove db handle after oop construction
 
 
 * 2.0.0
