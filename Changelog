@@ -7,6 +7,7 @@ Wed Jan  6 2016
 by JoungKyun Kim <http://oops.org>
 	- fixed memory leak
 	- fixed remove db handle after oop construction
+	- fixed segfault when reuse construction variable
 
 
 * 2.0.0

@@ -27,29 +27,18 @@ static inline geoip_object * geoip_fetch_object (zend_object * obj) {
 	return (geoip_object *) ((char *) obj - XtOffsetOf(geoip_object, std));
 }
 
-static int geoip_free_persistent (zend_resource * le, void * ptr) {
-	return le->ptr == ptr ? ZEND_HASH_APPLY_REMOVE : ZEND_HASH_APPLY_KEEP;
-}
-
 static void geoip_object_free_storage (zend_object * object) {
-	geoip_object * intern = (geoip_object *) geoip_fetch_object (object);
+	geoip_object * intern;
 
 	GE_PRINT_CALL_API_NAME;
 
+	intern = (geoip_object *) geoip_fetch_object (object);
+
 	zend_object_std_dtor (&intern->std);
 
-	if ( intern->u.ptr ) {
-		if ( intern->u.db->rsrc ) {
-			zend_list_delete (intern->u.db->rsrc);
-			zend_hash_apply_with_argument (
-					&EG(persistent_list),
-					(apply_func_arg_t) geoip_free_persistent,
-					&intern->u.ptr
-			);
-		}
+	if ( intern->db->rsrc ) {
+		zend_list_delete (intern->db->rsrc);
 	}
-
-	gefree(object);
 }
 
 static void geoip_object_new (zend_class_entry *class_type, zend_object_handlers *handlers, zend_object **retval TSRMLS_DC)

@@ -82,11 +82,8 @@ static zend_object_handlers geoip_object_handlers;
 static zend_object_handlers geoip_object_handlers_exception;
 
 typedef struct _geoip_object {
-	zend_object     std;
-	union {
-		GeoIP_API * db;
-		void      * ptr;
-	} u;
+	GeoIP_API * db;
+	zend_object std;
 } geoip_object;
 
 /* For Class declears }}} */
