@@ -252,10 +252,8 @@ PHP_FUNCTION(geoip_open)
 
 	GE_PRINT_CALL_API_NAME;
 
-	if ( object ) {
+	if ( object )
 		obj = Z_GEOIP_P (object);
-		obj->u.ptr = NULL;
-	}
 
 	GEOIP_REPLACE_ERROR_HANDLING;
 	switch (ZARGC) {
@@ -339,7 +337,7 @@ PHP_FUNCTION(geoip_open)
 	}
 
 	if ( object )
-		obj->u.db = ge;
+		obj->db = ge;
 
 	ge->rsrc = zend_register_resource (ge, le_geoip);
 	if ( ! object) 
@@ -364,10 +362,16 @@ PHP_FUNCTION(geoip_close)
 
 	if ( object ) {
 		obj = (geoip_object *) Z_GEOIP_P (object);
-		ge = obj->u.db;
+		ge = obj->db;
+
+		ge_printf ("ge                         : %ld\n", ge);
+
 		if ( ! ge || ge->gi != NULL )
 			RETURN_TRUE;
-		zend_list_delete (obj->u.db->rsrc);
+
+		ge_printf ("ge->gi                     : %ld\n", ge->gi);
+
+		zend_list_close (obj->db->rsrc);
 	} else {
 		if ( zend_parse_parameters (ZARGC, "r", &ge_link) == FAILURE )
 			return;
@@ -375,7 +379,7 @@ PHP_FUNCTION(geoip_close)
 		GEOIP_FETCH_RESOURCE (ge, GeoIP_API *, ge_link, "GeoIP link", le_geoip);
 		ge_printf ("ge                         : %ld\n", ge);
 		ge_printf ("ge->gi                     : %ld\n", ge->gi);
-		zend_list_delete (Z_RES_P (ge_link));
+		zend_list_close (Z_RES_P (ge_link));
 	}
 
 	RETURN_TRUE;
@@ -399,7 +403,7 @@ PHP_FUNCTION(geoip_database_info)
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
 		obj = (geoip_object *) Z_GEOIP_P (object);
-		ge = obj->u.db;
+		ge = obj->db;
 		if ( ! ge || ge->gi == NULL ) {
 			php_error_docref (NULL, E_WARNING, "No GeoIP object available");
 			GEOIP_RESTORE_ERROR_HANDLING;
@@ -472,7 +476,7 @@ PHP_FUNCTION(geoip_country_code_by_name)
 
 	if ( object ) {
 		obj = (geoip_object *) Z_GEOIP_P (object);
-		ge = obj->u.db;
+		ge = obj->db;
 		if ( ! ge || ge->gi == NULL ) {
 			php_error_docref (NULL, E_WARNING, "No GeoIP object available");
 			GEOIP_RESTORE_ERROR_HANDLING;
@@ -527,7 +531,7 @@ PHP_FUNCTION(geoip_country_name_by_name)
 
 	if ( object ) {
 		obj = (geoip_object *) Z_GEOIP_P (object);
-		ge = obj->u.db;
+		ge = obj->db;
 		if ( ! ge || ge->gi == NULL ) {
 			php_error_docref (NULL, E_WARNING, "No GeoIP object available");
 			GEOIP_RESTORE_ERROR_HANDLING;
@@ -584,7 +588,7 @@ PHP_FUNCTION(geoip_id_by_name)
 
 	if ( object ) {
 		obj = (geoip_object *) Z_GEOIP_P (object);
-		ge = obj->u.db;
+		ge = obj->db;
 		if ( ! ge || ge->gi == NULL ) {
 			php_error_docref (NULL, E_WARNING, "No GeoIP object available");
 			GEOIP_RESTORE_ERROR_HANDLING;
@@ -649,7 +653,7 @@ PHP_FUNCTION(geoip_record_by_name)
 
 	if ( object ) {
 		obj = (geoip_object *) Z_GEOIP_P (object);
-		ge = obj->u.db;
+		ge = obj->db;
 		if ( ! ge || ge->gi == NULL ) {
 			php_error_docref (NULL, E_WARNING, "No GeoIP object available");
 			GEOIP_RESTORE_ERROR_HANDLING;
@@ -724,7 +728,7 @@ PHP_FUNCTION(geoip_org_by_name)
 
 	if ( object ) {
 		obj = (geoip_object *) Z_GEOIP_P (object);
-		ge = obj->u.db;
+		ge = obj->db;
 		if ( ! ge || ge->gi == NULL ) {
 			php_error_docref (NULL, E_WARNING, "No GeoIP object available");
 			GEOIP_RESTORE_ERROR_HANDLING;
