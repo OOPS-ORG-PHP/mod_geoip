@@ -36,7 +36,7 @@ static void geoip_object_free_storage (zend_object * object) {
 
 	zend_object_std_dtor (&intern->std);
 
-	if ( intern->db->rsrc ) {
+	if ( intern->db != NULL && intern->db->rsrc ) {
 		zend_list_delete (intern->db->rsrc);
 	}
 }

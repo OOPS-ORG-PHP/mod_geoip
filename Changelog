@@ -8,6 +8,7 @@ by JoungKyun Kim <http://oops.org>
 	- fixed memory leak
 	- fixed remove db handle after oop construction
 	- fixed segfault when reuse construction variable
+	- support Exception on non-oops mode
 
 
 * 2.0.0
