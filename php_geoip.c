@@ -342,7 +342,8 @@ PHP_FUNCTION(geoip_open)
 		obj->u.db = ge;
 
 	ge->rsrc = zend_register_resource (ge, le_geoip);
-	RETVAL_RES (ge->rsrc);
+	if ( ! object) 
+		RETVAL_RES (ge->rsrc);
 
 	GEOIP_RESTORE_ERROR_HANDLING;
 }
