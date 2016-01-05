@@ -113,17 +113,17 @@ static void php_geoip_init_globals(zend_geoip_globals *geoip_globals)
 }
 /* }}} */
 
-/* {{{ _close_geoip_link (zend_resource *rsrc TSRMLS_DC)
+/* {{{ _close_geoip_link (zend_resource * res)
  */
-static void _close_geoip_link (zend_resource *rsrc TSRMLS_DC)
+static void _close_geoip_link (zend_resource * res)
 {
 	GE_PRINT_CALL_API_NAME;
 
-	if ( ! rsrc )
+	if ( ! res )
 		return;
 
-	if ( rsrc->ptr ) {
-		GeoIP_API *ge = (GeoIP_API *) rsrc->ptr;
+	if ( res->ptr ) {
+		GeoIP_API *ge = (GeoIP_API *) res->ptr;
 		ge_printf ("ge before free             : %ld\n", ge);
 		ge_printf ("ge before free             : %ld\n", ge->gi);
 		GeoIP_delete (ge->gi);
