@@ -3,6 +3,8 @@ PHP GeoIP Extension Changelog
 
 * 2.0.2
 --------------------------------------------------------------------------------
+Thu Jan  7 2016
+	- fixed zend_list_delete to zend_list_close
 
 
 * 2.0.1
