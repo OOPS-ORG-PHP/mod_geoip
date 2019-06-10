@@ -28,7 +28,8 @@ To install this extension type the following:
 ```bash
 [root@host mod_krisp]$ phpize
 [root@host mod_krisp]$ ./configure
-[root@host mod_krisp]$ make && make install
+[root@host mod_krisp]$ make test PHP_EXECUTABLE=/usr/bin/php
+[root@host mod_krisp]$ make install
 ```
 
 ## Usage
