@@ -619,11 +619,15 @@ PHP_FUNCTION(geoip_id_by_name)
 
 	country_id = GeoIP_id_by_name (ge->gi, ZSTR_VAL (host));
 
+#if PHP_VERSION_ID < 70300
 	if ( array_init (return_value) == FAILURE ) {
 		php_error_docref (NULL, E_WARNING, "geoip_id_by_name: Failure array init");
 		GEOIP_RESTORE_ERROR_HANDLING;
 		RETURN_FALSE;
 	}
+#else
+	array_init (return_value);
+#endif
 
 	add_assoc_long (return_value, "country_id", country_id);
 	add_assoc_string (return_value, "code",
@@ -689,11 +693,15 @@ PHP_FUNCTION(geoip_record_by_name)
 		RETURN_FALSE;
 	}
 
+#if PHP_VERSION_ID < 70300
 	if ( array_init (return_value) == FAILURE ) {
 		php_error_docref (NULL, E_WARNING, "geoip_record_by_name: Failure array init");
 		GEOIP_RESTORE_ERROR_HANDLING;
 		RETURN_FALSE;
 	}
+#else
+	array_init (return_value);
+#endif
 
 	add_assoc_string (return_value, "country_code", gir->country_code ? gir->country_code : "");
 	add_assoc_string (return_value, "region", gir->region ? gir->region : "");
