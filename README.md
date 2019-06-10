@@ -31,6 +31,10 @@ To install this extension type the following:
 [root@host mod_krisp]$ make && make install
 ```
 
+## Usage
+
+See also [doc directory](https://github.com/OOPS-ORG-PHP/mod_geoip/tree/master/vim/doc)
+
 ## COPYRIGHT AND LICENCE
 
 Copyright (C) 2019 by JoungKyun.Kim &lt;https://joungkyun.github.com&gt;
