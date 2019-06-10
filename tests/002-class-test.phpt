@@ -11,7 +11,7 @@ if ( ! extension_loaded ('geoip') ) {
 --INI--
 --FILE--
 <?php
-$searches = array ('oops.org', 'kornet.net', 'dacom.net');
+$searches = array ('cnn.com', 'kornet.net', 'dacom.net');
 
 /*
  * GeoIP::__construct (database, flag)
@@ -115,11 +115,11 @@ try {
 --EXPECT--
 Array
 (
-    [country_id] => 119
-    [code] => KR
-    [name] => Korea, Republic of
+    [country_id] => 225
+    [code] => US
+    [name] => United States
 )
-ISP NAME: LG DACOM Corporation
+ISP NAME: Fastly
 Array
 (
     [country_id] => 119
