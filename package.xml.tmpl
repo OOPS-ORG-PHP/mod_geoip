@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.10.6" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+	<name>geoip</name>
+	<channel>pecl.php.net</channel>
+	<summary>geoip - detection contry with ip address</summary>
+	<description>
+		This extension is php extension of Maxmind's GeoIP library. But, It is not same php geoip extension of Maxmind
+		See also, https://github.com/OOPS-ORG-PHP/mod_geoip/
+	</description>
+	<lead>
+		<name>JoungKyun.Kim</name>
+		<user>joungkyun</user>
+		<email>joungkyun@daum.net</email>
+		<active>yes</active>
+	</lead>
+	<date>@curdate@</date>
+	<time>@curtime@</time>
+	<version>
+		<release>2.0.3</release>
+		<api>2.0.0</api>
+	</version>
+	<stability>
+		<release>stable</release>
+		<api>stable</api>
+	</stability>
+	<license uri="https://raw.githubusercontent.com/OOPS-ORG-PHP/mod_geoip/master/LICENSE">GPL v2</license>
+	<notes>
+		- Support PHP 7.4
+	</notes>
+	<contents>
+		<dir name="/">
+			<file md5sum="@LICENSE@" name="LICENSE" role="doc" />
+			<file md5sum="@README.md@" name="README.md" role="doc" />
+			<file md5sum="@config.m4@" name="config.m4" role="src" />
+			<file md5sum="@php_geoip.c@" name="php_geoip.c" role="src" />
+			<file md5sum="@php_geoip.h@" name="php_geoip.h" role="src" />
+			<file md5sum="@php_geoip_class.c@" name="php_geoip_class.c" role="src" />
+			<file md5sum="@php_geoip_class.h@" name="php_geoip_class.h" role="src" />
+			<file md5sum="@sample.php@" name="sample.php" role="src" />
+			<file md5sum="@sample-oop.php@" name="sample-oop.php" role="src" />
+			<dir name="tests">
+				<file md5sum="@tests/001-function-test.phpt@" name="001-function-test.phpt" role="test" />
+				<file md5sum="@tests/002-class-test.phpt@" name="002-class-test.phpt" role="test" />
+				<file md5sum="@tests/003-functionalic-multiple-call.phpt@" name="003-functionalic-multiple-call.phpt" role="test" />
+				<file md5sum="@tests/004-classfy-multiple-call.phpt@" name="004-classfy-multiple-call.phpt" role="test" />
+				<file md5sum="@tests/005-classfy-multiple-call2.phpt@" name="005-classfy-multiple-call2.phpt" role="test" />
+			</dir>
+			<dir name="vim/syntax">
+				<file md5sum="@vim/syntax/php.vim@" name="php.vim" role="doc" />
+			</dir>
+		</dir> <!-- / -->
+	</contents>
+	<dependencies>
+		<required>
+			<php>
+				<min>7.0.0</min>
+			</php>
+			<pearinstaller>
+				<min>1.4.3</min>
+			</pearinstaller>
+		</required>
+	</dependencies>
+	<providesextension>geoip</providesextension>
+	<extsrcrelease />
+	<changelog>
+		<release>
+			<stability><release>stable</release><api>stable</api></stability>
+			<version><release>2.0.3</release><api>2.0.0</api></version>
+			<date>@curdate@</date>
+			<notes>
+				- Support PHP 7.4
+			</notes>
+		</release>
+		<release>
+			<stability><release>stable</release><api>stable</api></stability>
+			<version><release>2.0.2</release><api>2.0.0</api></version>
+			<date>2019-06-10</date>
+			<notes>
+				- Support PHP 7.3
+				- fixed zend_list_delete to zend_list_close
+			</notes>
+		</release>
+		<release>
+			<stability><release>stable</release><api>stable</api></stability>
+			<version><release>2.0.1</release><api>2.0.0</api></version>
+			<date>2016-01-06</date>
+			<notes>
+				- fixed memory leak (0f77426)
+				- fixed remove db handle after oop construction (43c9dfa)
+				- fixed segfault when reuse construction variable (101a847)
+				- support Exception on non-oops mode (ec7e8f8)
+				- enhanced error message (0e8346a)
+			</notes>
+		</release>
+		<release>
+			<stability><release>stable</release><api>stable</api></stability>
+			<version><release>2.0.0</release><api>2.0.0</api></version>
+			<date>2015-12-28</date>
+			<notes>
+				- Support PHP 7
+				- unspoort PHP 5 and before
+			</notes>
+		</release>
+		<release>
+			<stability><release>stable</release><api>stable</api></stability>
+			<version><release>1.1.2</release><api>1.1.2</api></version>
+			<date>2012-11-04</date>
+			<notes>
+				- support PHP 5.4
+				- support 64bit library check
+				- fixed deprecated zend_get_parameters_ex
+				- support OOP
+			</notes>
+		</release>
+		<release>
+			<stability><release>stable</release><api>stable</api></stability>
+			<version><release>1.1.1</release><api>1.0.0</api></version>
+			<date>2006-09-09</date>
+			<notes>
+				- fixed memory leak of GeoIPCity GeoIPISP
+			</notes>
+		</release>
+		<release>
+			<stability><release>stable</release><api>stable</api></stability>
+			<version><release>1.1.0</release><api>1.0.0</api></version>
+			<date>2006-09-07</date>
+			<notes>
+				- fixed memory leak
+				- support GeoIPISP
+				- support GeoIPCITY
+				- support GeoIPORG
+			</notes>
+		</release>
+		<release>
+			<stability><release>stable</release><api>stable</api></stability>
+			<version><release>1.0.0</release><api>1.0.0</api></version>
+			<date>2006-06-19</date>
+			<notes>
+				- first build
+				- config.m4 used maxmind's
+			</notes>
+		</release>
+	</changelog>
+</package>
