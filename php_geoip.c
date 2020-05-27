@@ -51,6 +51,7 @@
 #include "php.h"
 #include "php_ini.h"
 #include "ext/standard/info.h"
+#include "zend_exceptions.h"
 #include "php_geoip.h"
 
 #if PHP_API_VERSION < 20151012
@@ -174,7 +175,7 @@ PHP_MINIT_FUNCTION(geoip)
 #if defined(HAVE_SPL)
 	REGISTER_GEOIP_PER_CLASS(Exception, exception, spl_ce_RuntimeException);
 #else
-	REGISTER_GEOIP_PER_CLASS(Exception, exception, zend_exception_get_default(TSRMLS_C));
+	REGISTER_GEOIP_PER_CLASS(Exception, exception, zend_ce_exception);
 #endif
 	/* }}} */
 
