@@ -17,7 +17,7 @@
 
 
 /*
- * PHP5 Korea IPS Class API
+ * PHP5 GeoIP IPS Class API
  */
 
 /* {{{ Class API */
@@ -29,7 +29,12 @@ static int geoip_free_persistent (zend_rsrc_list_entry * le, void * ptr TSRMLS_D
 static void geoip_object_free_storage (void * object TSRMLS_DC) {
 	geoip_object * intern = (geoip_object *) object;
 
+#if PHP_VERSION_ID == 50000
+	zend_hash_destroy(intern->std.properties);
+	FREE_HASHTABLE(intern->std.properties);
+#else
 	zend_object_std_dtor (&intern->std TSRMLS_CC);
+#endif
 
 	if ( intern->u.ptr ) {
 		if ( intern->u.db->rsrc ) {
@@ -52,7 +57,19 @@ static void geoip_object_new (zend_class_entry *class_type, zend_object_handlers
 
 	intern = emalloc (sizeof (geoip_object));
 	memset (intern, 0, sizeof (geoip_object));
+#if PHP_VERSION_ID == 50000
+	intern->std.ce = class_type;
 
+	ALLOC_HASHTABLE(intern->std.properties);
+	zend_hash_init(intern->std.properties, 0, NULL, ZVAL_PTR_DTOR, 0);
+	zend_hash_copy(intern->std.properties, &class_type->default_properties, (copy_ctor_func_t) zval_add_ref, (void *) &tmp, sizeof(zval *));
+	retval->handle = zend_objects_store_put(
+		intern,
+		NULL,
+		(zend_objects_free_object_storage_t) geoip_object_free_storage,
+		NULL TSRMLS_CC
+	);
+#else
 	zend_object_std_init (&intern->std, class_type TSRMLS_CC);
 	retval->handle = zend_objects_store_put(
 		intern,
@@ -60,6 +77,7 @@ static void geoip_object_new (zend_class_entry *class_type, zend_object_handlers
 		(zend_objects_free_object_storage_t) geoip_object_free_storage,
 		NULL TSRMLS_CC
 	);
+#endif
 	retval->handlers = handlers;
 }
 

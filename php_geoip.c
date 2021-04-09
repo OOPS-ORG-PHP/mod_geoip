@@ -64,7 +64,11 @@ zend_function_entry geoip_functions[] = {
 /* {{{ geoip_module_entry
  */
 zend_module_entry geoip_module_entry = {
-#if ZEND_MODULE_API_NO >= 20010901
+#if ZEND_MODULE_API_NO >= 20050922
+	STANDARD_MODULE_HEADER_EX,
+	NULL,
+	geoip_deps,
+#elif ZEND_MODULE_API_NO >= 20010901
 	STANDARD_MODULE_HEADER,
 #endif
 	"geoip",

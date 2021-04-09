@@ -3,7 +3,12 @@ Check for geoip functionalic test
 --SKIPIF--
 <?php
 if ( ! extension_loaded ('geoip') ) {
-	print 'skip';
+	if ( version_compare(PHP_VERSION, "5.1.0", "<") ) {
+		dl ('geoip.so');
+		if ( ! extension_loaded ('geoip') )
+			print 'skip';
+	} else
+		print 'skip';
 }
 ?>
 --POST--
@@ -11,6 +16,9 @@ if ( ! extension_loaded ('geoip') ) {
 --INI--
 --FILE--
 <?php
+if ( version_compare(PHP_VERSION, "5.1.0", "<") )
+    dl ('geoip.so');
+
 $searches = array ('cnn.com', 'kornet.net', 'dacom.net');
 
 /*
