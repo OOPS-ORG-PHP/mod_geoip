@@ -217,7 +217,7 @@ PHP_MINFO_FUNCTION(geoip)
 PHP_FUNCTION(geoip_open)
 {
 	zval      * database;
-	int         flag;
+	long        flag;
 	char      * dbname;
 	int         dbtype = 0;
 	int         dbl = 0;
@@ -388,7 +388,7 @@ PHP_FUNCTION(geoip_database_info)
  */
 PHP_FUNCTION(geoip_db_avail)
 {
-	int type = 0;
+	long type = 0;
 
 	if ( zend_parse_parameters (ZEND_NUM_ARGS () TSRMLS_CC, "l", &type) == FAILURE )
 		return;
