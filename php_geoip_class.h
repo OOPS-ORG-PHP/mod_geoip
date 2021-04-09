@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 JoungKyun.Kim <http://oops.org> all rights reserved
+ * Copyright 2021. JoungKyun.Kim all rights reserved.
  *
  * This file is part of mod_geoip
  *

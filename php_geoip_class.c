@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 JoungKyun.Kim <http://oops.org> all rights reserved
+ * Copyright 2021. JoungKyun.Kim all rights reserved.
  *
  * This file is part of mod_geoip
  *
@@ -21,16 +21,15 @@
  * Project: mod_geoip :: GeoIP php exntension
  * File:    php_geoip_class.c
  *
- * Copyright (c) 2020 JoungKyun.Kim
+ * Copyright 2021. JoungKyun.Kim all rights reserved.
  *
  * LICENSE: GPL
  *
  * @category    Database
  * @package     mod_geoip
- * @author      JoungKyun.Kim <http://oops.org>
- * @copyright   2020 JoungKyun.KIm
+ * @author      JoungKyun.Kim
+ * @copyright   2021. JoungKyun.Kim
  * @license     GPL
- * @version     SVN: $Id$
  * @since       File available since release 0.0.1
  */
 
