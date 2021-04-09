@@ -44,7 +44,10 @@ static int le_geoip;
 /* }}} */
 
 /* {{{ geoip_functions[] */
-const zend_function_entry geoip_functions[] = {
+#if PHP_VERSION_ID >= 50300
+const
+#endif
+zend_function_entry geoip_functions[] = {
 	PHP_FE(geoip_open,                 NULL)   
 	PHP_FE(geoip_close,                NULL)   
 	PHP_FE(geoip_database_info,        NULL)   
@@ -226,7 +229,9 @@ PHP_FUNCTION(geoip_open)
 	int         ge_argc = ZEND_NUM_ARGS ();
 
 	zval      * object = getThis ();
+#if PHP_VERSION_ID >= 50300
 	zend_error_handling error_handling;
+#endif
 
 	GeoIP_API * ge;
 
@@ -327,7 +332,9 @@ PHP_FUNCTION(geoip_close)
 
 	zval         * object = getThis ();
 	geoip_object * obj;
+#if PHP_VERSION_ID >= 50300
 	zend_error_handling error_handling;
+#endif
 
 	if ( object ) {
 		obj = (geoip_object *) zend_object_store_get_object (object TSRMLS_CC);
@@ -357,7 +364,9 @@ PHP_FUNCTION(geoip_database_info)
 
 	zval         * object = getThis ();
 	geoip_object * obj;
+#if PHP_VERSION_ID >= 50300
 	zend_error_handling error_handling;
+#endif
 
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
@@ -409,7 +418,9 @@ PHP_FUNCTION(geoip_country_code_by_name)
 
 	zval         * object = getThis ();
 	geoip_object * obj;
+#if PHP_VERSION_ID >= 50300
 	zend_error_handling error_handling;
+#endif
 
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
@@ -464,7 +475,9 @@ PHP_FUNCTION(geoip_country_name_by_name)
 
 	zval         * object = getThis ();
 	geoip_object * obj;
+#if PHP_VERSION_ID >= 50300
 	zend_error_handling error_handling;
+#endif
 
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
@@ -519,7 +532,9 @@ PHP_FUNCTION(geoip_id_by_name)
 
 	zval         * object = getThis ();
 	geoip_object * obj;
+#if PHP_VERSION_ID >= 50300
 	zend_error_handling error_handling;
+#endif
 
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
@@ -583,7 +598,9 @@ PHP_FUNCTION(geoip_record_by_name)
 
 	zval         * object = getThis ();
 	geoip_object * obj;
+#if PHP_VERSION_ID >= 50300
 	zend_error_handling error_handling;
+#endif
 
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
@@ -657,7 +674,9 @@ PHP_FUNCTION(geoip_org_by_name)
 
 	zval         * object = getThis ();
 	geoip_object * obj;
+#if PHP_VERSION_ID >= 50300
 	zend_error_handling error_handling;
+#endif
 
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
