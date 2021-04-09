@@ -33,6 +33,11 @@ extern zend_module_entry geoip_module_entry;
 #include "TSRM.h"
 #endif
 
+#if PHP_VERSION_ID >= 80000
+#define TSRMLS_DC
+#define TSRMLS_CC
+#endif
+
 #include <GeoIP.h>
 #include <GeoIPCity.h>
 
