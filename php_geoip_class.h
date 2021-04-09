@@ -5,6 +5,8 @@
 #ifndef PHP_GEOIP_CLASS_H
 #define PHP_GEOIP_CLASS_H
 
+#if PHP_MAJOR_VERSION > 4
+
 /* {{{ Exception entry */
 #if PHP_VERSION_ID >= 50300
 const
@@ -121,6 +123,12 @@ typedef struct _geoip_object {
 } geoip_object;
 
 /* For Class declears }}} */
+
+#else
+#  define GEOIP_REPLACE_ERROR_HANDLING
+#  define GEOIP_RESTORE_ERROR_HANDLING
+typedef zval geoip_object;
+#endif // PHP_MAJOR_VERSION > 4
 
 #endif
 

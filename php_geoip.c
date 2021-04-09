@@ -146,6 +146,7 @@ PHP_MINIT_FUNCTION(geoip)
    le_geoip = zend_register_list_destructors_ex (_close_geoip_link, NULL, "GeoIP link", module_number);
 
    /* {{{ Class declear */
+#if PHP_MAJOR_VERSION > 4
    REGISTER_GEOIP_CLASS(NULL);
    geoip_ce->ce_flags &= ~ZEND_ACC_FINAL_CLASS;
    geoip_ce->constructor->common.fn_flags |= ZEND_ACC_FINAL;
@@ -155,6 +156,7 @@ PHP_MINIT_FUNCTION(geoip)
 #elif PHP_MAJOR_VERSION >= 5
    REGISTER_GEOIP_PER_CLASS(Exception, exception, zend_exception_get_default(TSRMLS_C));
 #endif
+#endif // PHP_MAJOR_VERSION > 4
 	/* }}} */
 
    /* define geoip open method */
@@ -317,11 +319,13 @@ PHP_FUNCTION(geoip_open)
 			ge, le_geoip
 	);
 
+#if PHP_MAJOR_VERSION > 4
 	if ( object ) {
 		geoip_object * obj;
 		obj = (geoip_object *) zend_object_store_get_object (object TSRMLS_CC);
 		obj->u.db = ge;
 	}
+#endif
 
 	GEOIP_RESTORE_ERROR_HANDLING;
 }
@@ -341,11 +345,13 @@ PHP_FUNCTION(geoip_close)
 #endif
 
 	if ( object ) {
+#if PHP_MAJOR_VERSION > 4
 		obj = (geoip_object *) zend_object_store_get_object (object TSRMLS_CC);
 		ge = obj->u.db;
 		if ( ! ge || ge->gi != NULL )
 			RETURN_TRUE;
 		zend_list_delete (obj->u.db->rsrc);
+#endif
 	} else {
 		if ( zend_parse_parameters (ZEND_NUM_ARGS () TSRMLS_CC, "r", &ge_link) == FAILURE )
 			return;
@@ -374,6 +380,7 @@ PHP_FUNCTION(geoip_database_info)
 
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
+#if PHP_MAJOR_VERSION > 4
 		obj = (geoip_object *) zend_object_store_get_object (object TSRMLS_CC);
 		ge = obj->u.db;
 		if ( ! ge || ge->gi == NULL ) {
@@ -381,6 +388,7 @@ PHP_FUNCTION(geoip_database_info)
 			GEOIP_RESTORE_ERROR_HANDLING;
 			RETURN_EMPTY_STRING ();
 		}
+#endif
 	} else {
 		if ( zend_parse_parameters (ZEND_NUM_ARGS () TSRMLS_CC, "r", &ge_link) == FAILURE ) {
 			GEOIP_RESTORE_ERROR_HANDLING;
@@ -428,10 +436,12 @@ PHP_FUNCTION(geoip_country_code_by_name)
 
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
+#if PHP_MAJOR_VERSION > 4
 		if ( zend_parse_parameters (ZEND_NUM_ARGS () TSRMLS_CC, "s", &host, &hostlen) == FAILURE ) {
 			GEOIP_RESTORE_ERROR_HANDLING;
 			return;
 		}
+#endif
 	} else {
 		if ( zend_parse_parameters (ZEND_NUM_ARGS () TSRMLS_CC, "rs", &ge_link, &host, &hostlen) == FAILURE ) {
 			GEOIP_RESTORE_ERROR_HANDLING;
@@ -446,6 +456,7 @@ PHP_FUNCTION(geoip_country_code_by_name)
 	}
 
 	if ( object ) {
+#if PHP_MAJOR_VERSION > 4
 		obj = (geoip_object *) zend_object_store_get_object (object TSRMLS_CC);
 		ge = obj->u.db;
 		if ( ! ge || ge->gi == NULL ) {
@@ -453,6 +464,7 @@ PHP_FUNCTION(geoip_country_code_by_name)
 			GEOIP_RESTORE_ERROR_HANDLING;
 			RETURN_EMPTY_STRING ();
 		}
+#endif
 	} else
 		ZEND_FETCH_RESOURCE (ge, GeoIP_API *, &ge_link, -1, "GeoIP link", le_geoip);
 
@@ -485,10 +497,12 @@ PHP_FUNCTION(geoip_country_name_by_name)
 
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
+#if PHP_MAJOR_VERSION > 4
 		if ( zend_parse_parameters (ZEND_NUM_ARGS () TSRMLS_CC, "s", &host, &hostlen) == FAILURE ) {
 			GEOIP_RESTORE_ERROR_HANDLING;
 			return;
 		}
+#endif
 	} else {
 		if ( zend_parse_parameters (ZEND_NUM_ARGS () TSRMLS_CC, "rs", &ge_link, &host, &hostlen) == FAILURE ) {
 			GEOIP_RESTORE_ERROR_HANDLING;
@@ -502,6 +516,7 @@ PHP_FUNCTION(geoip_country_name_by_name)
 	}
 
 	if ( object ) {
+#if PHP_MAJOR_VERSION > 4
 		obj = (geoip_object *) zend_object_store_get_object (object TSRMLS_CC);
 		ge = obj->u.db;
 		if ( ! ge || ge->gi == NULL ) {
@@ -509,6 +524,7 @@ PHP_FUNCTION(geoip_country_name_by_name)
 			GEOIP_RESTORE_ERROR_HANDLING;
 			RETURN_EMPTY_STRING ();
 		}
+#endif
 	} else
 		ZEND_FETCH_RESOURCE (ge, GeoIP_API *, &ge_link, -1, "GeoIP link", le_geoip);
 
@@ -542,10 +558,12 @@ PHP_FUNCTION(geoip_id_by_name)
 
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
+#if PHP_MAJOR_VERSION > 4
 		if ( zend_parse_parameters (ZEND_NUM_ARGS () TSRMLS_CC, "s", &host, &hostlen) == FAILURE ) {
 			GEOIP_RESTORE_ERROR_HANDLING;
 			return;
 		}
+#endif
 	} else {
 		if ( zend_parse_parameters (ZEND_NUM_ARGS () TSRMLS_CC, "rs", &ge_link, &host, &hostlen) == FAILURE ) {
 			GEOIP_RESTORE_ERROR_HANDLING;
@@ -560,6 +578,7 @@ PHP_FUNCTION(geoip_id_by_name)
 	}
 
 	if ( object ) {
+#if PHP_MAJOR_VERSION > 4
 		obj = (geoip_object *) zend_object_store_get_object (object TSRMLS_CC);
 		ge = obj->u.db;
 		if ( ! ge || ge->gi == NULL ) {
@@ -567,6 +586,7 @@ PHP_FUNCTION(geoip_id_by_name)
 			GEOIP_RESTORE_ERROR_HANDLING;
 			RETURN_FALSE;
 		}
+#endif
 	} else
 		ZEND_FETCH_RESOURCE (ge, GeoIP_API *, &ge_link, -1, "GeoIP link", le_geoip);
 
@@ -608,10 +628,12 @@ PHP_FUNCTION(geoip_record_by_name)
 
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
+#if PHP_MAJOR_VERSION > 4
 		if ( zend_parse_parameters (ZEND_NUM_ARGS () TSRMLS_CC, "s", &host, &hostlen) == FAILURE ) {
 			GEOIP_RESTORE_ERROR_HANDLING;
 			return;
 		}
+#endif
 	} else {
 		if ( zend_parse_parameters (ZEND_NUM_ARGS () TSRMLS_CC, "rs", &ge_link, &host, &hostlen) == FAILURE ) {
 			GEOIP_RESTORE_ERROR_HANDLING;
@@ -626,6 +648,7 @@ PHP_FUNCTION(geoip_record_by_name)
 	}
 
 	if ( object ) {
+#if PHP_MAJOR_VERSION > 4
 		obj = (geoip_object *) zend_object_store_get_object (object TSRMLS_CC);
 		ge = obj->u.db;
 		if ( ! ge || ge->gi == NULL ) {
@@ -633,6 +656,7 @@ PHP_FUNCTION(geoip_record_by_name)
 			GEOIP_RESTORE_ERROR_HANDLING;
 			RETURN_FALSE;
 		}
+#endif
 	} else
 		ZEND_FETCH_RESOURCE (ge, GeoIP_API *, &ge_link, -1, "GeoIP link", le_geoip);
 
@@ -684,10 +708,12 @@ PHP_FUNCTION(geoip_org_by_name)
 
 	GEOIP_REPLACE_ERROR_HANDLING;
 	if ( object ) {
+#if PHP_MAJOR_VERSION > 4
 		if ( zend_parse_parameters (ZEND_NUM_ARGS () TSRMLS_CC, "s", &host, &hostlen) == FAILURE ) {
 			GEOIP_RESTORE_ERROR_HANDLING;
 			return;
 		}
+#endif
 	} else {
 		if ( zend_parse_parameters (ZEND_NUM_ARGS () TSRMLS_CC, "rs", &ge_link, &host, &hostlen) == FAILURE ) {
 			GEOIP_RESTORE_ERROR_HANDLING;
@@ -702,6 +728,7 @@ PHP_FUNCTION(geoip_org_by_name)
 	}
 
 	if ( object ) {
+#if PHP_MAJOR_VERSION > 4
 		obj = (geoip_object *) zend_object_store_get_object (object TSRMLS_CC);
 		ge = obj->u.db;
 		if ( ! ge || ge->gi == NULL ) {
@@ -709,6 +736,7 @@ PHP_FUNCTION(geoip_org_by_name)
 			GEOIP_RESTORE_ERROR_HANDLING;
 			RETURN_FALSE;
 		}
+#endif
 	} else
 		ZEND_FETCH_RESOURCE (ge, GeoIP_API *, &ge_link, -1, "GeoIP link", le_geoip);
 

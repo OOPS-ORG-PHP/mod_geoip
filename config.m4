@@ -22,6 +22,31 @@ dnl [  --enable-geoip           Enable geoip support])
 if test "$PHP_GEOIP" != "no"; then
   dnl Write more examples of tests here...
 
+  AC_MSG_CHECKING([check the PHP mininum version for chardet (>=4.3.0 or <7.0.0)])
+  if test -z $phpincludedir ; then
+    phpincludedir=$prefix"/include/php"
+  fi
+
+  PHP_CHKVER=`
+    awk '/^#define PHP_VERSION_ID/ { print $NF; }' $phpincludedir/main/php_version.h 2> /dev/null
+  `
+  PHP_CURVER=`
+    awk '/^#define PHP_VERSION /  { print gensub(/\"/, "", "g", $NF); }' \
+      $phpincludedir/main/php_version.h 2> /dev/null
+  `
+  AC_MSG_RESULT([$PHP_CURVER])
+  if test -z $PHP_CHKVER ; then
+    IFS="." read MAJORL MINORL PATCHL <<< "$PHP_CURVER"
+    printf -v PHP_CHKVER "%d%02d%02d" "$MAJORL" "$MINORL" "$PATCHL"
+  fi
+
+  if test -z $PHP_CHKVER || test $PHP_CHKVER -lt 40300 ; then
+    AC_MSG_ERROR([The krisp extension is unsupported PHP $PHP_CURVER. Use PHP 4.3.0 or after!])
+  fi
+  if test -z $PHP_CHKVER || test $PHP_CHKVER -ge 70000 ; then
+    AC_MSG_ERROR([The krisp extension is unsupported PHP $PHP_CURVER. Use PHP 5.6 or before!])
+  fi
+
   # --with-geoip -> check with-path
   SEARCH_PATH="/usr/local /usr"     # you might want to change this
   SEARCH_FOR="/include/GeoIP.h"  # you most likely want to change this

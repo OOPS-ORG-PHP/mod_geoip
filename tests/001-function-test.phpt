@@ -49,7 +49,6 @@ $searches = array ('cnn.com', 'kornet.net', 'dacom.net');
  *
  */
 
-try {
 	/* open conutry database */
 	$g = GeoIP_open (GEOIP_MEMORY_CACHE|GEOIP_CHECK_CACHE);
 	$gc = null;
@@ -126,11 +125,6 @@ try {
 	GeoIP_close ($g);
 	if ( is_resource ($gc) ) GeoIP_close ($gc);
 	if ( is_resource ($gi) ) GeoIP_close ($gi);
-} catch ( GeoIPException $e ) {
-	fprintf (STDERR, "%s\n", $e->getMessage ());
-	$err = preg_split ('/\r?\n/', $e->getTraceAsString ());
-	print_r ($err);
-}
 ?>
 --EXPECT--
 Array

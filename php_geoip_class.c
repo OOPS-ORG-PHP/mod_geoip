@@ -20,6 +20,8 @@
  * PHP5 GeoIP IPS Class API
  */
 
+#if PHP_MAJOR_VERSION > 4
+
 /* {{{ Class API */
 
 static int geoip_free_persistent (zend_rsrc_list_entry * le, void * ptr TSRMLS_DC) {
@@ -95,6 +97,8 @@ static zend_object_value geoip_object_new_exception (zend_class_entry * class_ty
 	return retval;
 }
 /* Class API }}} */
+
+#endif // PHP_MAJOR_VERSION > 4
 
 /*
  * Local variables:

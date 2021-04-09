@@ -41,6 +41,13 @@ extern zend_module_entry geoip_module_entry;
 #  endif
 #endif /* end of ifndef PHP_VERSION_ID */
 
+#if PHP_MAJOR_VERSION < 5
+#  ifdef getThis
+#    undef getThis
+#  endif
+#  define getThis() NULL
+#endif
+
 #include <GeoIP.h>
 #include <GeoIPCity.h>
 

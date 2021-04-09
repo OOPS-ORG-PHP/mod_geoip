@@ -10,6 +10,9 @@ if ( ! extension_loaded ('geoip') ) {
 	} else
 		print 'skip';
 }
+
+if ( version_compare(PHP_VERSION, '5.0.0', '<') )
+	print 'skip';
 ?>
 --POST--
 --GET--
@@ -49,75 +52,69 @@ $searches = array ('cnn.com', 'kornet.net', 'dacom.net');
  *
  */
 
-try {
-	/* open conutry database */
-	$g = new GeoIP (GEOIP_MEMORY_CACHE|GEOIP_CHECK_CACHE);
-	/* open city database */
-	if ( GeoIP_db_avail (GEOIP_CITY_EDITION_REV0) )
-		$gc = new GeoIP (GEOIP_CITY_EDITION_REV0, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
-	/* open isp database */
-	if ( GeoIP_db_avail (GEOIP_ISP_EDITION) )
-		$gi = new GeoIP (GEOIP_ISP_EDITION, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
+/* open conutry database */
+$g = new GeoIP (GEOIP_MEMORY_CACHE|GEOIP_CHECK_CACHE);
+/* open city database */
+if ( GeoIP_db_avail (GEOIP_CITY_EDITION_REV0) )
+	$gc = new GeoIP (GEOIP_CITY_EDITION_REV0, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
+/* open isp database */
+if ( GeoIP_db_avail (GEOIP_ISP_EDITION) )
+	$gi = new GeoIP (GEOIP_ISP_EDITION, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
 
-	#echo "TYPE: " . $g->database_info () ."\n";
+#echo "TYPE: " . $g->database_info () ."\n";
 
-	foreach ( $searches as $v ) {
-		/*
-		 * search geoip country database
-		 *
-		 * array GeoIP::id_by_name (geoip handle, host);
-		 * return:
-		 *      array (
-		 *              country_id,
-		 *              code,        // code of nation
-		 *              name         // name of nation
-		 *            );
-		 *
-		 * string GeoIP::country_code_by_name (host)
-		 * string GeoIP::country_code_by_name (host)
-		 *
-		 */
-		$r = $g->id_by_name ($v);
-		print_r ($r);
+foreach ( $searches as $v ) {
+	/*
+	 * search geoip country database
+	 *
+	 * array GeoIP::id_by_name (geoip handle, host);
+	 * return:
+	 *      array (
+	 *              country_id,
+	 *              code,        // code of nation
+	 *              name         // name of nation
+	 *            );
+	 *
+	 * string GeoIP::country_code_by_name (host)
+	 * string GeoIP::country_code_by_name (host)
+	 *
+	 */
+	$r = $g->id_by_name ($v);
+	print_r ($r);
 
-		/* print city information
-		 *
-		 * array GeoIP::record_by_name (host)
-		 * return:
-		 *      array (
-		 *              country_code,  // country 2 digit code
-		 *              region,        // states or do (korean)
-		 *              city,          // name of city
-		 *              postal_code,   // postal code or post code
-		 *              latitude,
-		 *              longitude,
-		 *              if ( DB is GEOIP_CITY_EDITION_REV1 ) {
-		 *                  dma_code,
-		 *                  area_code,
-		 *              }
-		 *            );
-		 */
-		if ( GeoIP_db_avail (GEOIP_CITY_EDITION_REV0) ) {
-			$rc = $gc->record_by_name ($v);
-			print_r ($rc);
-		}
-
-		/* print isp information
-		 *
-		 * string GeoIP::org_by_name (host)
-		 */
-		if ( GeoIP_db_avail (GEOIP_ISP_EDITION) ) {
-			$ri = $gi->org_by_name ($v);
-			echo "ISP NAME: $ri\n";
-		}
-
-		#echo "### " . $g->country_code_by_name ($v) . "\n";
-		#echo "### " . $g->country_name_by_name ($v) . "\n";
+	/* print city information
+	 *
+	 * array GeoIP::record_by_name (host)
+	 * return:
+	 *      array (
+	 *              country_code,  // country 2 digit code
+	 *              region,        // states or do (korean)
+	 *              city,          // name of city
+	 *              postal_code,   // postal code or post code
+	 *              latitude,
+	 *              longitude,
+	 *              if ( DB is GEOIP_CITY_EDITION_REV1 ) {
+	 *                  dma_code,
+	 *                  area_code,
+	 *              }
+	 *            );
+	 */
+	if ( GeoIP_db_avail (GEOIP_CITY_EDITION_REV0) ) {
+		$rc = $gc->record_by_name ($v);
+		print_r ($rc);
 	}
-} catch ( GeoIPException $e ) {
-	fprintf (STDERR, "%s\n", $e->getMessage ());
-	$err = preg_split ('/\r?\n/', $e->getTraceAsString ());
-	print_r ($err);
+
+	/* print isp information
+	 *
+	 * string GeoIP::org_by_name (host)
+	 */
+	if ( GeoIP_db_avail (GEOIP_ISP_EDITION) ) {
+		$ri = $gi->org_by_name ($v);
+		echo "ISP NAME: $ri\n";
+	}
+
+	#echo "### " . $g->country_code_by_name ($v) . "\n";
+	#echo "### " . $g->country_name_by_name ($v) . "\n";
 }
 ?>
 --EXPECT--
