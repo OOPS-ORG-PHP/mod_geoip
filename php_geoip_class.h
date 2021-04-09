@@ -67,7 +67,7 @@ zend_module_dep geoip_deps[] = {
 
 /* {{{ For Class declears */
 #if PHP_VERSION_ID >= 50200
-#  define GEOIP_ACC_PUBLIC , ZEND_ACC_PUBLIC
+#  define GEOIP_ACC_PUBLIC ,ZEND_ACC_PUBLIC
 #else
 #  define GEOIP_ACC_PUBLIC
 #endif
@@ -76,15 +76,27 @@ zend_module_dep geoip_deps[] = {
 const
 #endif
 zend_function_entry geoip_methods[] = {
-	PHP_ME_MAPPING (__construct,          geoip_open,                 NULL GEOIP_ACC_PUBLIC)
-	PHP_ME_MAPPING (close,                geoip_close,                NULL GEOIP_ACC_PUBLIC)
-	PHP_ME_MAPPING (database_info,        geoip_database_info,        NULL GEOIP_ACC_PUBLIC)
-	PHP_ME_MAPPING (db_avail,             geoip_db_avail,             NULL GEOIP_ACC_PUBLIC)
-	PHP_ME_MAPPING (country_code_by_name, geoip_country_code_by_name, NULL GEOIP_ACC_PUBLIC)
-	PHP_ME_MAPPING (country_name_by_name, geoip_country_name_by_name, NULL GEOIP_ACC_PUBLIC)
-	PHP_ME_MAPPING (id_by_name,           geoip_id_by_name,           NULL GEOIP_ACC_PUBLIC)
-	PHP_ME_MAPPING (record_by_name,       geoip_record_by_name,       NULL GEOIP_ACC_PUBLIC)
-	PHP_ME_MAPPING (org_by_name,          geoip_org_by_name,          NULL GEOIP_ACC_PUBLIC)
+#if PHP_VERSION_ID < 50200
+	PHP_ME_MAPPING (__construct,          geoip_open,                 NULL)
+	PHP_ME_MAPPING (close,                geoip_close,                NULL)
+	PHP_ME_MAPPING (database_info,        geoip_database_info,        NULL)
+	PHP_ME_MAPPING (db_avail,             geoip_db_avail,             NULL)
+	PHP_ME_MAPPING (country_code_by_name, geoip_country_code_by_name, NULL)
+	PHP_ME_MAPPING (country_name_by_name, geoip_country_name_by_name, NULL)
+	PHP_ME_MAPPING (id_by_name,           geoip_id_by_name,           NULL)
+	PHP_ME_MAPPING (record_by_name,       geoip_record_by_name,       NULL)
+	PHP_ME_MAPPING (org_by_name,          geoip_org_by_name,          NULL)
+#else
+	PHP_ME_MAPPING (__construct,          geoip_open,                 NULL, ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING (close,                geoip_close,                NULL, ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING (database_info,        geoip_database_info,        NULL, ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING (db_avail,             geoip_db_avail,             NULL, ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING (country_code_by_name, geoip_country_code_by_name, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING (country_name_by_name, geoip_country_name_by_name, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING (id_by_name,           geoip_id_by_name,           NULL, ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING (record_by_name,       geoip_record_by_name,       NULL, ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING (org_by_name,          geoip_org_by_name,          NULL, ZEND_ACC_PUBLIC)
+#endif
 	{NULL, NULL, NULL}
 };
 
