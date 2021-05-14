@@ -44,8 +44,8 @@ try {
 	/* open conutry database */
 	$g = new GeoIP (GEOIP_MEMORY_CACHE|GEOIP_CHECK_CACHE);
 	/* open city database */
-	if ( GeoIP_db_avail (GEOIP_CITY_EDITION_REV0) )
-		$gc = new GeoIP (GEOIP_CITY_EDITION_REV0, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
+	if ( GeoIP_db_avail (GEOIP_CITY_EDITION_REV1) )
+		$gc = new GeoIP (GEOIP_CITY_EDITION_REV1, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
 	/* open isp database */
 	if ( GeoIP_db_avail (GEOIP_ISP_EDITION) )
 		$gi = new GeoIP (GEOIP_ISP_EDITION, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
@@ -88,7 +88,7 @@ try {
 		 *              }
 		 *            );
 		 */
-		if ( GeoIP_db_avail (GEOIP_CITY_EDITION_REV0) ) {
+		if ( GeoIP_db_avail (GEOIP_CITY_EDITION_REV1) ) {
 			$rc = $gc->record_by_name ($v);
 			print_r ($rc);
 		}

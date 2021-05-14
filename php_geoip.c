@@ -64,22 +64,24 @@ ZEND_DECLARE_MODULE_GLOBALS(geoip)
 
 static int le_geoip;
 
+#include "php_geoip_arginfo.h"
+
 /* {{{ INCLUDE Classify header */
 #include "php_geoip_class.h"
 /* }}} */
 
 /* {{{ geoip_functions[] */
 const zend_function_entry geoip_functions[] = {
-	PHP_FE(geoip_open,                 NULL)   
-	PHP_FE(geoip_close,                NULL)   
-	PHP_FE(geoip_database_info,        NULL)   
-	PHP_FE(geoip_db_avail,             NULL)   
-	PHP_FE(geoip_country_code_by_name, NULL)
-	PHP_FE(geoip_country_name_by_name, NULL)
-	PHP_FE(geoip_id_by_name,           NULL)
-	PHP_FE(geoip_record_by_name,       NULL)
-	PHP_FE(geoip_org_by_name,          NULL)
-	{NULL, NULL, NULL}   
+	ZEND_FE(geoip_open,                 arginfo_geoip_open)
+	ZEND_FE(geoip_close,                arginfo_geoip_close)
+	ZEND_FE(geoip_database_info,        arginfo_geoip_database_info)
+	ZEND_FE(geoip_db_avail,             arginfo_geoip_db_avail)
+	ZEND_FE(geoip_country_code_by_name, arginfo_geoip_country_code_by_name)
+	ZEND_FE(geoip_country_name_by_name, arginfo_geoip_country_name_by_name)
+	ZEND_FE(geoip_id_by_name,           arginfo_gepip_id_by_name)
+	ZEND_FE(geoip_record_by_name,       arginfo_geoip_record_by_name)
+	ZEND_FE(geoip_org_by_name,          arginfo_geoip_org_by_name)
+	ZEND_FE_END
 };
 /* }}} */
 
@@ -93,8 +95,8 @@ zend_module_entry geoip_module_entry = {
 	geoip_functions,
 	PHP_MINIT(geoip),
 	PHP_MSHUTDOWN(geoip),
-	PHP_RINIT(geoip),      
-	PHP_RSHUTDOWN(geoip),   
+	PHP_RINIT(geoip),
+	PHP_RSHUTDOWN(geoip),
 	PHP_MINFO(geoip),
 #if ZEND_MODULE_API_NO >= 20010901
 	EXTENSION_VERSION, /* version number of the extension */
@@ -251,14 +253,14 @@ PHP_MINFO_FUNCTION(geoip)
 }
 /* }}} */
 
-/* {{{ proto (resource) geoip_open ([string database|int database_type[, int flag]])
+/* {{{ proto geoip_open (string|int database = NULL|GEOIP_COUNTRY_EDITION, int flag = GEOIP_MEMORY_CACHE|GEOIP_CHECK_CACHE): resource
  */
 PHP_FUNCTION(geoip_open)
 {
 	zval      * database;
 	zend_long   flag;
 	char      * dbname = NULL;
-	int         dbtype = 0;
+	int         dbtype = GEOIP_COUNTRY_EDITION;
 	int         dbl = 0;
 	struct      stat f;
 	int         r;
@@ -359,14 +361,14 @@ PHP_FUNCTION(geoip_open)
 		obj->db = ge;
 
 	ge->rsrc = zend_register_resource (ge, le_geoip);
-	if ( ! object) 
+	if ( ! object )
 		RETVAL_RES (ge->rsrc);
 
 	GEOIP_RESTORE_ERROR_HANDLING;
 }
 /* }}} */
 
-/* {{{ proto (bool) geoip_close (resource link)
+/* {{{ proto geoip_close (resource link): bool
  */
 PHP_FUNCTION(geoip_close)
 {
@@ -405,7 +407,7 @@ PHP_FUNCTION(geoip_close)
 }
 /* }}} */
 
-/* {{{ proto (string) geoip_database_info (resource link)
+/* {{{ proto geoip_database_info (resource link): string
  */
 PHP_FUNCTION(geoip_database_info)
 {
@@ -444,7 +446,7 @@ PHP_FUNCTION(geoip_database_info)
 }
 /* }}} */
 
-/* {{{ proto (long) geoip_db_avail (int type)
+/* {{{ proto geoip_db_avail (int type): int
  */
 PHP_FUNCTION(geoip_db_avail)
 {
@@ -459,7 +461,7 @@ PHP_FUNCTION(geoip_db_avail)
 }
 /* }}} */
 
-/* {{{ proto (string) geoip_country_code_by_name (resource link, string hostname)
+/* {{{ proto geoip_country_code_by_name (resource link, string hostname): string
  */
 PHP_FUNCTION(geoip_country_code_by_name)
 {
@@ -515,7 +517,7 @@ PHP_FUNCTION(geoip_country_code_by_name)
 }
 /* }}} */
 
-/* {{{ proto (string) geoip_country_name_by_name (resource link, string hostname)
+/* {{{ proto geoip_country_name_by_name (resource link, string hostname): string
  */
 PHP_FUNCTION(geoip_country_name_by_name)
 {
@@ -571,7 +573,7 @@ PHP_FUNCTION(geoip_country_name_by_name)
 }
 /* }}} */
 
-/* {{{ proto (array|false) gepip_id_by_name (resource link, string hostname)
+/* {{{ proto gepip_id_by_name (resource link, string hostname): array|false
  */
 PHP_FUNCTION(geoip_id_by_name)
 {
@@ -639,7 +641,7 @@ PHP_FUNCTION(geoip_id_by_name)
 }
 /* }}} */
 
-/* {{{ proto (array|false) geoip_record_by_name (resource link, string hostname))
+/* {{{ proto geoip_record_by_name (resource link, string hostname): array|false
  */
 PHP_FUNCTION(geoip_record_by_name)
 {
@@ -719,7 +721,7 @@ PHP_FUNCTION(geoip_record_by_name)
 }
 /* }}} */
 
-/* {{{ proto (string) geoip_org_by_name (resource link, string hostname)
+/* {{{ proto geoip_org_by_name (resource link, string hostname): string
  */
 PHP_FUNCTION(geoip_org_by_name)
 {

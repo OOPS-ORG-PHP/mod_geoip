@@ -45,8 +45,8 @@ try {
 	/* open conutry database */
 	$g = GeoIP_open (GEOIP_MEMORY_CACHE|GEOIP_CHECK_CACHE);
 	/* open city database */
-	if ( GeoIP_db_avail (GEOIP_CITY_EDITION_REV0) )
-		$gc = GeoIP_open (GEOIP_CITY_EDITION_REV0, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
+	if ( GeoIP_db_avail (GEOIP_CITY_EDITION_REV1) )
+		$gc = GeoIP_open (GEOIP_CITY_EDITION_REV1, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
 	/* open isp database */
 	if ( GeoIP_db_avail (GEOIP_ISP_EDITION) )
 		$gi = GeoIP_open (GEOIP_ISP_EDITION, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);

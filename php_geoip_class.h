@@ -59,16 +59,16 @@ const zend_module_dep geoip_deps[] = {
 
 /* {{{ For Class declears */
 const zend_function_entry geoip_methods[] = {
-	PHP_ME_MAPPING (__construct,          geoip_open,                 NULL, ZEND_ACC_PUBLIC)
-	PHP_ME_MAPPING (close,                geoip_close,                NULL, ZEND_ACC_PUBLIC)
-	PHP_ME_MAPPING (database_info,        geoip_database_info,        NULL, ZEND_ACC_PUBLIC)
-	PHP_ME_MAPPING (db_avail,             geoip_db_avail,             NULL, ZEND_ACC_PUBLIC)
-	PHP_ME_MAPPING (country_code_by_name, geoip_country_code_by_name, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME_MAPPING (country_name_by_name, geoip_country_name_by_name, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME_MAPPING (id_by_name,           geoip_id_by_name,           NULL, ZEND_ACC_PUBLIC)
-	PHP_ME_MAPPING (record_by_name,       geoip_record_by_name,       NULL, ZEND_ACC_PUBLIC)
-	PHP_ME_MAPPING (org_by_name,          geoip_org_by_name,          NULL, ZEND_ACC_PUBLIC)
-	{NULL, NULL, NULL}
+	PHP_ME_MAPPING (__construct,          geoip_open,                 arginfo_class_GeoIP___construct,          ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING (close,                geoip_close,                arginfo_class_GeoIP_close,                ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING (database_info,        geoip_database_info,        arginfo_class_GeoIP_database_info,        ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING (db_avail,             geoip_db_avail,             arginfo_class_GeoIP_db_avail,             ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING (country_code_by_name, geoip_country_code_by_name, arginfo_class_GeoIP_country_code_by_name, ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING (country_name_by_name, geoip_country_name_by_name, arginfo_class_GeoIP_country_name_by_name, ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING (id_by_name,           geoip_id_by_name,           arginfo_class_GeoIP_id_by_name,           ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING (record_by_name,       geoip_record_by_name,       arginfo_class_GeoIP_record_by_name,       ZEND_ACC_PUBLIC)
+	PHP_ME_MAPPING (org_by_name,          geoip_org_by_name,          arginfo_class_GeoIP_org_by_name,          ZEND_ACC_PUBLIC)
+	ZEND_FE_END
 };
 
 #define REGISTER_GEOIP_CLASS(parent) { \

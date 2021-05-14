@@ -47,8 +47,8 @@ try {
 	$gc = null;
 	$gi = null;
 	/* open city database */
-	if ( GeoIP_db_avail (GEOIP_CITY_EDITION_REV0) )
-		$gc = GeoIP_open (GEOIP_CITY_EDITION_REV0, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
+	#if ( GeoIP_db_avail (GEOIP_CITY_EDITION_REV1) )
+	#	$gc = GeoIP_open (GEOIP_CITY_EDITION_REV1, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
 	/* open isp database */
 	if ( GeoIP_db_avail (GEOIP_ISP_EDITION) )
 		$gi = GeoIP_open (GEOIP_ISP_EDITION, GEOIP_INDEX_CACHE|GEOIP_CHECK_CACHE);
@@ -94,10 +94,10 @@ try {
 		 *              }
 		 *            );
 		 */
-		if ( is_resource ($gc) ) {
-			$rc = GeoIP_record_by_name ($gc, $v);
-			print_r ($rc);
-		}
+		#if ( is_resource ($gc) ) {
+		#	$rc = GeoIP_record_by_name ($gc, $v);
+		#	print_r ($rc);
+		#}
 
 		/* print isp information
 		 *
