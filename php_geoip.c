@@ -19,7 +19,7 @@
  * PHP5 GeoIP module "geoip"
  */
 
-#define EXTENSION_VERSION "1.1.3"
+#define EXTENSION_VERSION "1.1.4"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
