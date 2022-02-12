@@ -38,7 +38,7 @@ See also [doc directory](https://github.com/OOPS-ORG-PHP/mod_geoip/tree/master/v
 
 ## COPYRIGHT AND LICENCE
 
-Copyright 2021. JoungKyun.Kim all rights reserved.
+Copyright 2022. JoungKyun.Kim All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
